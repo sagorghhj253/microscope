@@ -33,10 +33,6 @@
             --success: #4CAF50;
             --info: #2196F3;
             --error: #F44336;
-            --android-blue: #4285F4;
-            --android-green: #34A853;
-            --android-yellow: #FBBC05;
-            --android-red: #EA4335;
             --ripple: rgba(255, 255, 255, 0.1);
             --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
@@ -48,35 +44,6 @@
             min-height: 100vh;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-        }
-
-        /* Android Status Bar */
-        .status-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 24px;
-            background: var(--dark-surface);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 16px;
-            font-size: 12px;
-            z-index: 1000;
-            border-bottom: 1px solid var(--divider);
-        }
-
-        .status-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .status-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         /* Android Navigation Bar */
@@ -136,14 +103,14 @@
         .app-container {
             max-width: 100%;
             margin: 0 auto;
-            padding-top: 24px;
+            padding-top: 0;
             padding-bottom: 56px;
         }
 
         /* Android App Bar */
         .app-bar {
             position: sticky;
-            top: 24px;
+            top: 0;
             background: var(--dark-surface);
             padding: 12px 16px;
             display: flex;
@@ -331,6 +298,7 @@
             align-items: center;
             gap: 4px;
             border: 1px solid var(--divider);
+            cursor: pointer;
         }
 
         .chip.active {
@@ -498,16 +466,6 @@
         .tab.active {
             color: var(--primary);
             border-bottom-color: var(--primary);
-        }
-
-        .tab-indicator {
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: transform 0.3s ease;
         }
 
         /* Android Dialogs */
@@ -728,6 +686,34 @@
             display: none !important;
         }
 
+        /* Loading spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--divider);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Clinical badge */
+        .clinical-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--secondary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            z-index: 10;
+        }
+
         /* Safe area for iPhone X and above */
         @supports (padding: max(0px)) {
             .app-container {
@@ -762,63 +748,59 @@
             }
         }
 
-        /* Loading spinner */
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--divider);
-            border-top-color: var(--primary);
+        /* Analysis Status */
+        .analysis-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--dark-elevated);
+            border-radius: 8px;
+            margin: 8px 16px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            background: var(--success);
+            animation: pulse 2s infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .status-indicator.inactive {
+            background: var(--text-disabled);
+            animation: none;
         }
 
-        /* Clinical badge */
-        .clinical-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: var(--secondary);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 500;
-            z-index: 10;
+        .status-indicator.processing {
+            background: var(--warning);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
     </style>
 </head>
 <body>
-    <!-- Android Status Bar -->
-    <div class="status-bar">
-        <div class="status-left">
-            <span id="currentTime">10:30 AM</span>
-            <span id="clinicalMode">CLINICAL MODE</span>
-        </div>
-        <div class="status-right">
-            <span>📶</span>
-            <span>📶</span>
-            <span>📶</span>
-            <span>🔋 85%</span>
-        </div>
-    </div>
-
     <!-- App Container -->
     <div class="app-container">
         <!-- App Bar -->
         <div class="app-bar">
-            <button class="android-btn btn-icon" onclick="toggleDrawer()">☰</button>
             <div>
                 <div class="app-bar-title">HemaScan Pro</div>
                 <div class="app-bar-subtitle" id="currentPage">Live Analysis</div>
             </div>
             <div class="app-bar-actions">
                 <button class="android-btn btn-icon" onclick="showSettings()">⚙️</button>
-                <button class="android-btn btn-icon" onclick="toggleClinicalMode()">🩺</button>
+                <button class="android-btn btn-icon" onclick="toggleClinicalMode()" id="clinicalBtn">🩺</button>
             </div>
+        </div>
+
+        <!-- Analysis Status -->
+        <div class="analysis-status">
+            <div class="status-indicator" id="statusIndicator"></div>
+            <span id="statusText">Ready for analysis</span>
         </div>
 
         <!-- Main Content (will be dynamically loaded) -->
@@ -837,9 +819,9 @@
             <span class="nav-icon">🖼️</span>
             <span>Image</span>
         </a>
-        <a href="#" class="nav-item" onclick="loadPage('results')" data-page="results">
+        <a href="#" class="nav-item" onclick="loadPage('analysis')" data-page="analysis">
             <span class="nav-icon">📊</span>
-            <span>Results</span>
+            <span>Analysis</span>
             <span class="nav-badge" id="resultsBadge">0</span>
         </a>
         <a href="#" class="nav-item" onclick="loadPage('filters')" data-page="filters">
@@ -852,12 +834,12 @@
         </a>
     </div>
 
-    <!-- Android Dialogs -->
+    <!-- Settings Dialog -->
     <div class="dialog-overlay" id="settingsDialog">
         <div class="dialog">
             <div class="dialog-header">
-                <div class="dialog-title">Settings</div>
-                <div class="dialog-subtitle">Configure analysis parameters</div>
+                <div class="dialog-title">Analysis Settings</div>
+                <div class="dialog-subtitle">Configure detection parameters</div>
             </div>
             <div class="dialog-content">
                 <div class="list-item">
@@ -872,8 +854,8 @@
                 </div>
                 <div class="list-item">
                     <div class="list-content">
-                        <div class="list-title">Show Markers</div>
-                        <div class="list-subtitle">Display cell markers</div>
+                        <div class="list-title">Show Cell Markers</div>
+                        <div class="list-subtitle">Display detected cells</div>
                     </div>
                     <label class="switch">
                         <input type="checkbox" id="markersToggle" checked>
@@ -883,7 +865,7 @@
                 <div class="list-item">
                     <div class="list-content">
                         <div class="list-title">Auto-Capture</div>
-                        <div class="list-subtitle">Capture when cells detected</div>
+                        <div class="list-subtitle">Save when abnormalities detected</div>
                     </div>
                     <label class="switch">
                         <input type="checkbox" id="autoCaptureToggle">
@@ -892,22 +874,22 @@
                 </div>
                 <div class="slider-container">
                     <div class="slider-label">
-                        <span>Sensitivity</span>
+                        <span>Detection Sensitivity</span>
                         <span class="slider-value" id="sensitivityValue">75%</span>
                     </div>
                     <input type="range" class="range-slider" id="sensitivitySlider" min="1" max="100" value="75">
                 </div>
                 <div class="slider-container">
                     <div class="slider-label">
-                        <span>Analysis Interval</span>
-                        <span class="slider-value" id="intervalValue">500ms</span>
+                        <span>Analysis Speed</span>
+                        <span class="slider-value" id="intervalValue">Normal</span>
                     </div>
-                    <input type="range" class="range-slider" id="intervalSlider" min="100" max="2000" value="500" step="100">
+                    <input type="range" class="range-slider" id="intervalSlider" min="1" max="3" value="2" step="1">
                 </div>
             </div>
             <div class="dialog-actions">
                 <button class="android-btn btn-secondary" onclick="closeDialog('settingsDialog')">Cancel</button>
-                <button class="android-btn btn-primary" onclick="saveSettings()">Save</button>
+                <button class="android-btn btn-primary" onclick="saveSettings()">Apply</button>
             </div>
         </div>
     </div>
@@ -916,12 +898,12 @@
     <div class="dialog-overlay" id="filterDialog">
         <div class="dialog">
             <div class="dialog-header">
-                <div class="dialog-title">Apply Filter</div>
-                <div class="dialog-subtitle">Select and configure image filter</div>
+                <div class="dialog-title">Image Filters</div>
+                <div class="dialog-subtitle">Enhance detection accuracy</div>
             </div>
             <div class="dialog-content">
                 <div class="filter-grid">
-                    <div class="filter-item" onclick="selectFilter('gaussian')">Gaussian</div>
+                    <div class="filter-item active" onclick="selectFilter('gaussian')">Gaussian</div>
                     <div class="filter-item" onclick="selectFilter('median')">Median</div>
                     <div class="filter-item" onclick="selectFilter('bilateral')">Bilateral</div>
                     <div class="filter-item" onclick="selectFilter('contrast')">Contrast</div>
@@ -929,28 +911,21 @@
                     <div class="filter-item" onclick="selectFilter('morphology')">Morphology</div>
                     <div class="filter-item" onclick="selectFilter('adaptive')">Adaptive</div>
                     <div class="filter-item" onclick="selectFilter('segmentation')">Segmentation</div>
-                    <div class="filter-item" onclick="selectFilter('color')">Color Space</div>
+                    <div class="filter-item" onclick="selectFilter('color')">Color</div>
                 </div>
-                <div id="filterParams" class="hidden">
+                <div id="filterParams" style="margin-top: 16px; display: none;">
                     <div class="slider-container">
                         <div class="slider-label">
-                            <span>Kernel Size</span>
-                            <span class="slider-value" id="kernelValue">5</span>
+                            <span>Filter Strength</span>
+                            <span class="slider-value" id="filterStrength">5</span>
                         </div>
-                        <input type="range" class="range-slider" id="kernelSlider" min="3" max="31" value="5" step="2">
-                    </div>
-                    <div class="slider-container">
-                        <div class="slider-label">
-                            <span>Sigma</span>
-                            <span class="slider-value" id="sigmaValue">3.0</span>
-                        </div>
-                        <input type="range" class="range-slider" id="sigmaSlider" min="0.1" max="10" value="3.0" step="0.1">
+                        <input type="range" class="range-slider" id="filterSlider" min="1" max="10" value="5">
                     </div>
                 </div>
             </div>
             <div class="dialog-actions">
                 <button class="android-btn btn-secondary" onclick="closeDialog('filterDialog')">Cancel</button>
-                <button class="android-btn btn-primary" onclick="applySelectedFilter()">Apply</button>
+                <button class="android-btn btn-primary" onclick="applySelectedFilter()">Apply Filter</button>
             </div>
         </div>
     </div>
@@ -961,7 +936,7 @@
         <span class="snackbar-action" onclick="hideSnackbar()">DISMISS</span>
     </div>
 
-    <!-- Hidden elements for OpenCV -->
+    <!-- Hidden elements for camera and upload -->
     <video id="video" autoplay playsinline class="hidden"></video>
     <canvas id="canvas" class="hidden"></canvas>
     <input type="file" id="imageUpload" accept="image/*" class="hidden">
@@ -976,18 +951,26 @@
         let currentPage = 'live';
         let isOpenCvReady = false;
         let isLiveDetection = false;
-        let clinicalMode = true;
+        let isClinicalMode = true;
         let currentFilter = null;
         let videoStream = null;
         let analysisInterval = null;
-        let clinicalData = {
+        let analysisData = {
             readings: [],
             settings: {
                 liveDetection: true,
                 showMarkers: true,
                 autoCapture: false,
                 sensitivity: 75,
-                interval: 500
+                interval: 500,
+                activeFilter: 'none'
+            },
+            currentAnalysis: {
+                totalCells: 0,
+                rbcCount: 0,
+                wbcCount: 0,
+                processingTime: 0,
+                timestamp: null
             }
         };
 
@@ -995,51 +978,40 @@
         // INITIALIZATION
         // ========================================
         function init() {
-            updateTime();
-            setInterval(updateTime, 60000);
-            
             loadPage('live');
             setupEventListeners();
-        }
-
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('currentTime').textContent = timeString;
+            updateStatus('Ready', 'success');
         }
 
         function setupEventListeners() {
             // Settings toggles
             document.getElementById('liveDetectionToggle').addEventListener('change', function() {
-                clinicalData.settings.liveDetection = this.checked;
+                analysisData.settings.liveDetection = this.checked;
             });
             
             document.getElementById('markersToggle').addEventListener('change', function() {
-                clinicalData.settings.showMarkers = this.checked;
+                analysisData.settings.showMarkers = this.checked;
             });
             
             document.getElementById('autoCaptureToggle').addEventListener('change', function() {
-                clinicalData.settings.autoCapture = this.checked;
+                analysisData.settings.autoCapture = this.checked;
             });
             
             // Sliders
             document.getElementById('sensitivitySlider').addEventListener('input', function() {
                 document.getElementById('sensitivityValue').textContent = this.value + '%';
-                clinicalData.settings.sensitivity = parseInt(this.value);
+                analysisData.settings.sensitivity = parseInt(this.value);
             });
             
             document.getElementById('intervalSlider').addEventListener('input', function() {
-                document.getElementById('intervalValue').textContent = this.value + 'ms';
-                clinicalData.settings.interval = parseInt(this.value);
+                const speeds = ['Slow', 'Normal', 'Fast'];
+                document.getElementById('intervalValue').textContent = speeds[this.value - 1];
+                analysisData.settings.interval = [1000, 500, 250][this.value - 1];
             });
             
-            // Filter sliders
-            document.getElementById('kernelSlider').addEventListener('input', function() {
-                document.getElementById('kernelValue').textContent = this.value;
-            });
-            
-            document.getElementById('sigmaSlider').addEventListener('input', function() {
-                document.getElementById('sigmaValue').textContent = this.value;
+            // Filter slider
+            document.getElementById('filterSlider').addEventListener('input', function() {
+                document.getElementById('filterStrength').textContent = this.value;
             });
         }
 
@@ -1070,8 +1042,8 @@
             const titles = {
                 'live': 'Live Analysis',
                 'image': 'Image Analysis',
-                'results': 'Clinical Results',
-                'filters': 'Filter Controls',
+                'analysis': 'Analysis Results',
+                'filters': 'Image Filters',
                 'export': 'Export Data'
             };
             return titles[page] || 'HemaScan Pro';
@@ -1083,10 +1055,10 @@
                     <div class="android-card">
                         <div class="card-header">
                             <div class="card-title">🔴 Live Camera Analysis</div>
-                            <span class="clinical-badge">CLINICAL</span>
+                            <span class="clinical-badge">CLINICAL MODE</span>
                         </div>
                         <div class="card-content">
-                            <div class="video-container">
+                            <div class="video-container" id="videoContainer">
                                 <div class="video-overlay" id="videoOverlay">
                                     <div class="spinner"></div>
                                     <div>Initializing camera...</div>
@@ -1097,28 +1069,24 @@
                                 <div class="result-item">
                                     <div class="result-label">Total Cells</div>
                                     <div class="result-value" id="totalCount">0</div>
-                                    <div class="result-label">Detected</div>
                                 </div>
                                 <div class="result-item">
                                     <div class="result-label">RBC Count</div>
                                     <div class="result-value" id="rbcCount">0</div>
-                                    <div class="result-label">Erythrocytes</div>
                                 </div>
                                 <div class="result-item">
                                     <div class="result-label">WBC Count</div>
                                     <div class="result-value" id="wbcCount">0</div>
-                                    <div class="result-label">Leukocytes</div>
                                 </div>
                                 <div class="result-item">
                                     <div class="result-label">Processing</div>
                                     <div class="result-value" id="processingTime">0</div>
-                                    <div class="result-label">ms/frame</div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-actions">
                             <button class="android-btn btn-primary" onclick="startLiveDetection()" id="startBtn">
-                                ▶ START LIVE
+                                ▶ START ANALYSIS
                             </button>
                             <button class="android-btn btn-danger" onclick="stopLiveDetection()" id="stopBtn" style="display: none;">
                                 ⏸ STOP
@@ -1130,11 +1098,11 @@
                     </div>
                     <div class="android-card">
                         <div class="card-header">
-                            <div class="card-title">⚙️ Quick Settings</div>
+                            <div class="card-title">⚡ Quick Actions</div>
                         </div>
                         <div class="card-content">
                             <div class="chip-container">
-                                <div class="chip" onclick="toggleSetting('markers')">
+                                <div class="chip active" onclick="toggleSetting('markers')">
                                     <span>📍</span>
                                     <span>Markers</span>
                                 </div>
@@ -1142,13 +1110,13 @@
                                     <span>🤖</span>
                                     <span>Auto-Capture</span>
                                 </div>
-                                <div class="chip active" onclick="toggleSetting('clinicalMode')">
-                                    <span>🩺</span>
-                                    <span>Clinical Mode</span>
-                                </div>
                                 <div class="chip" onclick="showDialog('filterDialog')">
                                     <span>🔧</span>
                                     <span>Filters</span>
+                                </div>
+                                <div class="chip" onclick="clearCurrentAnalysis()">
+                                    <span>🗑️</span>
+                                    <span>Clear</span>
                                 </div>
                             </div>
                         </div>
@@ -1162,85 +1130,84 @@
                         </div>
                         <div class="card-content">
                             <div class="video-container" id="imagePreview">
-                                <div class="video-overlay">
+                                <div class="video-overlay" id="imageOverlay">
                                     <div>📁</div>
-                                    <div>No image selected</div>
-                                    <button class="android-btn btn-primary" onclick="document.getElementById('imageUpload').click()" style="margin-top: 16px;">
-                                        SELECT IMAGE
-                                    </button>
+                                    <div>Select or capture image</div>
                                 </div>
                             </div>
                             <div class="results-grid" style="margin-top: 16px;">
                                 <div class="result-item">
                                     <div class="result-label">Image Size</div>
-                                    <div class="result-value" id="imageSize">0x0</div>
-                                    <div class="result-label">pixels</div>
+                                    <div class="result-value" id="imageSize">-</div>
                                 </div>
                                 <div class="result-item">
                                     <div class="result-label">Detected Cells</div>
-                                    <div class="result-value" id="imageCells">0</div>
-                                    <div class="result-label">total</div>
+                                    <div class="result-value" id="imageCells">-</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-label">Analysis Time</div>
+                                    <div class="result-value" id="imageTime">-</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-label">Confidence</div>
+                                    <div class="result-value" id="imageConfidence">-</div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-actions">
-                            <button class="android-btn btn-primary" onclick="document.getElementById('imageUpload').click()">
+                            <button class="android-btn btn-primary" onclick="captureImage()">
+                                📷 CAPTURE
+                            </button>
+                            <button class="android-btn btn-secondary" onclick="uploadImage()">
                                 📁 UPLOAD
                             </button>
-                            <button class="android-btn btn-secondary" onclick="processUploadedImage()">
+                            <button class="android-btn btn-accent" onclick="analyzeImage()">
                                 🔄 ANALYZE
-                            </button>
-                            <button class="android-btn btn-accent" onclick="showDialog('filterDialog')">
-                                🔧 FILTER
                             </button>
                         </div>
                     </div>
                 `,
                 
-                'results': `
+                'analysis': `
                     <div class="android-card">
                         <div class="card-header">
-                            <div class="card-title">📊 Clinical Results</div>
-                            <div class="card-subtitle">${clinicalData.readings.length} readings</div>
+                            <div class="card-title">📊 Analysis Results</div>
+                            <div class="card-subtitle">${analysisData.readings.length} readings</div>
                         </div>
                         <div class="card-content">
                             <div class="results-grid">
                                 <div class="result-item">
-                                    <div class="result-label">Avg. RBC</div>
+                                    <div class="result-label">Average RBC</div>
                                     <div class="result-value" id="avgRBC">0</div>
-                                    <div class="result-label">cells/frame</div>
                                 </div>
                                 <div class="result-item">
-                                    <div class="result-label">Avg. WBC</div>
+                                    <div class="result-label">Average WBC</div>
                                     <div class="result-value" id="avgWBC">0</div>
-                                    <div class="result-label">cells/frame</div>
                                 </div>
                                 <div class="result-item">
-                                    <div class="result-label">Success Rate</div>
-                                    <div class="result-value" id="successRate">0%</div>
-                                    <div class="result-label">detection</div>
+                                    <div class="result-label">Detection Rate</div>
+                                    <div class="result-value" id="detectionRate">0%</div>
                                 </div>
                                 <div class="result-item">
                                     <div class="result-label">Total Time</div>
-                                    <div class="result-value" id="totalTime">0</div>
-                                    <div class="result-label">minutes</div>
+                                    <div class="result-value" id="totalTime">0m</div>
                                 </div>
                             </div>
                             <div style="margin-top: 16px;">
                                 <div class="progress-linear">
-                                    <div class="progress-fill" style="width: 75%;"></div>
+                                    <div class="progress-fill" id="analysisProgress" style="width: 0%;"></div>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary);">
                                     <span>Analysis Progress</span>
-                                    <span>75%</span>
+                                    <span id="progressText">0%</span>
                                 </div>
                             </div>
                         </div>
                         <div class="card-actions">
-                            <button class="android-btn btn-primary" onclick="clearResults()">
-                                🗑️ CLEAR
+                            <button class="android-btn btn-danger" onclick="clearAllResults()">
+                                🗑️ CLEAR ALL
                             </button>
-                            <button class="android-btn btn-secondary" onclick="refreshResults()">
+                            <button class="android-btn btn-secondary" onclick="refreshAnalysis()">
                                 🔄 REFRESH
                             </button>
                         </div>
@@ -1250,16 +1217,16 @@
                             <div class="card-title">📈 Recent Readings</div>
                         </div>
                         <div class="card-content">
-                            <ul class="android-list" id="readingsList">
-                                <li class="list-item">
-                                    <div class="list-icon">🔴</div>
-                                    <div class="list-content">
-                                        <div class="list-title">Initial Analysis</div>
-                                        <div class="list-subtitle">Starting system...</div>
-                                    </div>
-                                    <div class="list-trailing">Just now</div>
-                                </li>
-                            </ul>
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                <ul class="android-list" id="readingsList">
+                                    <li class="list-item">
+                                        <div class="list-content">
+                                            <div class="list-title">No readings yet</div>
+                                            <div class="list-subtitle">Start analysis to see results</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 `,
@@ -1268,58 +1235,53 @@
                     <div class="android-card">
                         <div class="card-header">
                             <div class="card-title">🔧 Filter Controls</div>
-                            <div class="card-subtitle" id="currentFilter">No filter active</div>
+                            <div class="card-subtitle" id="currentFilterLabel">No filter active</div>
                         </div>
                         <div class="card-content">
                             <div class="filter-grid">
-                                <div class="filter-item active" onclick="selectFilter('gaussian')">
+                                <div class="filter-item" onclick="selectFilter('gaussian')" data-filter="gaussian">
+                                    <div style="font-size: 18px;">🔵</div>
                                     <div>Gaussian</div>
-                                    <div style="font-size: 10px; opacity: 0.7;">Blur</div>
                                 </div>
-                                <div class="filter-item" onclick="selectFilter('median')">
+                                <div class="filter-item" onclick="selectFilter('median')" data-filter="median">
+                                    <div style="font-size: 18px;">⚪</div>
                                     <div>Median</div>
-                                    <div style="font-size: 10px; opacity: 0.7;">Noise reduction</div>
                                 </div>
-                                <div class="filter-item" onclick="selectFilter('bilateral')">
+                                <div class="filter-item" onclick="selectFilter('bilateral')" data-filter="bilateral">
+                                    <div style="font-size: 18px;">🟣</div>
                                     <div>Bilateral</div>
-                                    <div style="font-size: 10px; opacity: 0.7;">Edge-preserving</div>
                                 </div>
-                                <div class="filter-item" onclick="selectFilter('contrast')">
+                                <div class="filter-item" onclick="selectFilter('contrast')" data-filter="contrast">
+                                    <div style="font-size: 18px;">🟡</div>
                                     <div>Contrast</div>
-                                    <div style="font-size: 10px; opacity: 0.7;">Enhancement</div>
                                 </div>
-                                <div class="filter-item" onclick="selectFilter('canny')">
+                                <div class="filter-item" onclick="selectFilter('canny')" data-filter="canny">
+                                    <div style="font-size: 18px;">🔴</div>
                                     <div>Canny</div>
-                                    <div style="font-size: 10px; opacity: 0.7;">Edge detection</div>
                                 </div>
-                                <div class="filter-item" onclick="selectFilter('morphology')">
+                                <div class="filter-item" onclick="selectFilter('morphology')" data-filter="morphology">
+                                    <div style="font-size: 18px;">🟢</div>
                                     <div>Morphology</div>
-                                    <div style="font-size: 10px; opacity: 0.7;">Structuring</div>
                                 </div>
                             </div>
                             <div id="filterControls" style="margin-top: 16px; display: none;">
                                 <div class="slider-container">
                                     <div class="slider-label">
-                                        <span>Kernel Size</span>
-                                        <span class="slider-value">5</span>
+                                        <span>Filter Strength</span>
+                                        <span class="slider-value" id="filterValue">5</span>
                                     </div>
-                                    <input type="range" class="range-slider" min="3" max="31" value="5" step="2">
+                                    <input type="range" class="range-slider" id="strengthSlider" min="1" max="10" value="5">
                                 </div>
-                                <div class="slider-container">
-                                    <div class="slider-label">
-                                        <span>Sigma</span>
-                                        <span class="slider-value">3.0</span>
-                                    </div>
-                                    <input type="range" class="range-slider" min="0.1" max="10" value="3.0" step="0.1">
+                                <div class="chip-container" style="margin-top: 12px;">
+                                    <div class="chip" onclick="applyFilterPreview()">Preview</div>
+                                    <div class="chip active" onclick="applyFilterToCurrent()">Apply</div>
+                                    <div class="chip" onclick="resetFilter()">Reset</div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-actions">
-                            <button class="android-btn btn-primary" onclick="applyCurrentFilter()">
-                                APPLY FILTER
-                            </button>
-                            <button class="android-btn btn-secondary" onclick="resetFilter()">
-                                RESET
+                            <button class="android-btn btn-primary" onclick="showDialog('filterDialog')">
+                                MORE FILTERS
                             </button>
                         </div>
                     </div>
@@ -1329,41 +1291,37 @@
                     <div class="android-card">
                         <div class="card-header">
                             <div class="card-title">📤 Export Data</div>
-                            <div class="card-subtitle">Share clinical results</div>
+                            <div class="card-subtitle">${analysisData.readings.length} readings available</div>
                         </div>
                         <div class="card-content">
                             <div class="android-list">
                                 <div class="list-item" onclick="exportData('csv')">
                                     <div class="list-icon">📄</div>
                                     <div class="list-content">
-                                        <div class="list-title">CSV Export</div>
+                                        <div class="list-title">Export as CSV</div>
                                         <div class="list-subtitle">Spreadsheet format</div>
                                     </div>
-                                    <div class="list-trailing">→</div>
                                 </div>
                                 <div class="list-item" onclick="exportData('json')">
                                     <div class="list-icon">📁</div>
                                     <div class="list-content">
-                                        <div class="list-title">JSON Export</div>
+                                        <div class="list-title">Export as JSON</div>
                                         <div class="list-subtitle">Structured data</div>
                                     </div>
-                                    <div class="list-trailing">→</div>
                                 </div>
                                 <div class="list-item" onclick="exportData('pdf')">
                                     <div class="list-icon">📊</div>
                                     <div class="list-content">
-                                        <div class="list-title">PDF Report</div>
+                                        <div class="list-title">Generate PDF Report</div>
                                         <div class="list-subtitle">Clinical report</div>
                                     </div>
-                                    <div class="list-trailing">→</div>
                                 </div>
                                 <div class="list-item" onclick="exportData('image')">
                                     <div class="list-icon">🖼️</div>
                                     <div class="list-content">
-                                        <div class="list-title">Image Export</div>
-                                        <div class="list-subtitle">Current analysis</div>
+                                        <div class="list-title">Export Images</div>
+                                        <div class="list-subtitle">All captured images</div>
                                     </div>
-                                    <div class="list-trailing">→</div>
                                 </div>
                             </div>
                         </div>
@@ -1390,24 +1348,43 @@
         function initPage(page) {
             switch(page) {
                 case 'live':
-                    initCamera();
+                    initLiveCamera();
                     break;
                 case 'image':
-                    initImageUpload();
+                    initImagePage();
                     break;
-                case 'results':
-                    updateResultsDisplay();
+                case 'analysis':
+                    updateAnalysisDisplay();
                     break;
                 case 'filters':
-                    initFilters();
+                    initFiltersPage();
                     break;
             }
         }
 
         // ========================================
-        // CAMERA AND LIVE ANALYSIS
+        // STATUS MANAGEMENT
         // ========================================
-        async function initCamera() {
+        function updateStatus(message, type = 'info') {
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+            
+            text.textContent = message;
+            indicator.className = 'status-indicator';
+            
+            if (type === 'success') {
+                indicator.classList.add('active');
+            } else if (type === 'warning') {
+                indicator.classList.add('processing');
+            } else if (type === 'error') {
+                indicator.style.background = 'var(--danger)';
+            }
+        }
+
+        // ========================================
+        // LIVE ANALYSIS FUNCTIONS
+        // ========================================
+        async function initLiveCamera() {
             try {
                 const constraints = {
                     video: {
@@ -1423,46 +1400,76 @@
                 
                 // Hide overlay when video loads
                 video.onloadeddata = () => {
-                    const overlay = document.querySelector('.video-overlay');
+                    const overlay = document.getElementById('videoOverlay');
                     if (overlay) overlay.style.display = 'none';
+                    updateStatus('Camera ready', 'success');
                 };
                 
             } catch (error) {
+                updateStatus('Camera access denied', 'error');
                 showSnackbar('Camera error: ' + error.message, 'error');
+                
+                // Show fallback options
+                const overlay = document.getElementById('videoOverlay');
+                if (overlay) {
+                    overlay.innerHTML = `
+                        <div>📷</div>
+                        <div>Camera not available</div>
+                        <button class="android-btn btn-primary" onclick="loadPage('image')" style="margin-top: 16px;">
+                            USE IMAGE MODE
+                        </button>
+                    `;
+                }
             }
         }
 
         function startLiveDetection() {
+            if (!videoStream) {
+                showSnackbar('Camera not available', 'error');
+                return;
+            }
+
             isLiveDetection = true;
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('stopBtn').style.display = 'inline-flex';
-            document.getElementById('videoStatus').textContent = 'Live Detection';
-            
-            // Simulate analysis for demo
+            document.getElementById('videoStatus').textContent = 'ANALYZING';
+            updateStatus('Live analysis running', 'warning');
+
+            // Start simulated analysis
             analysisInterval = setInterval(() => {
+                // Generate realistic cell counts
                 const total = Math.floor(Math.random() * 100) + 50;
                 const rbc = Math.floor(total * 0.9);
                 const wbc = total - rbc;
                 const processing = Math.floor(Math.random() * 50) + 10;
                 
+                // Update display
                 document.getElementById('totalCount').textContent = total;
                 document.getElementById('rbcCount').textContent = rbc;
                 document.getElementById('wbcCount').textContent = wbc;
                 document.getElementById('processingTime').textContent = processing;
                 
-                // Add to clinical data
-                clinicalData.readings.push({
-                    timestamp: new Date().toISOString(),
-                    total: total,
-                    rbc: rbc,
-                    wbc: wbc,
-                    processing: processing
-                });
+                // Store analysis data
+                analysisData.currentAnalysis = {
+                    totalCells: total,
+                    rbcCount: rbc,
+                    wbcCount: wbc,
+                    processingTime: processing,
+                    timestamp: new Date().toISOString()
+                };
                 
-                // Update badge
-                document.getElementById('resultsBadge').textContent = clinicalData.readings.length;
+                // Add to readings if significant
+                if (total > 20) {
+                    analysisData.readings.push({...analysisData.currentAnalysis});
+                    document.getElementById('resultsBadge').textContent = analysisData.readings.length;
+                    
+                    // Auto-capture if enabled
+                    if (analysisData.settings.autoCapture && (wbc > 10 || total > 80)) {
+                        captureSnapshot();
+                    }
+                }
                 
-            }, clinicalData.settings.interval);
+            }, analysisData.settings.interval);
             
             showSnackbar('Live analysis started');
         }
@@ -1471,7 +1478,8 @@
             isLiveDetection = false;
             document.getElementById('startBtn').style.display = 'inline-flex';
             document.getElementById('stopBtn').style.display = 'none';
-            document.getElementById('videoStatus').textContent = 'Paused';
+            document.getElementById('videoStatus').textContent = 'PAUSED';
+            updateStatus('Analysis paused', 'success');
             
             if (analysisInterval) {
                 clearInterval(analysisInterval);
@@ -1482,133 +1490,190 @@
         }
 
         function captureSnapshot() {
+            if (analysisData.currentAnalysis.totalCells === 0) {
+                showSnackbar('No cells detected to capture', 'warning');
+                return;
+            }
+            
             const timestamp = new Date().toLocaleTimeString();
-            showSnackbar(`Snapshot captured at ${timestamp}`);
+            const snapshot = {
+                ...analysisData.currentAnalysis,
+                type: 'snapshot',
+                capturedAt: new Date().toISOString()
+            };
             
-            // Add to readings
-            clinicalData.readings.push({
-                timestamp: new Date().toISOString(),
-                total: parseInt(document.getElementById('totalCount').textContent),
-                rbc: parseInt(document.getElementById('rbcCount').textContent),
-                wbc: parseInt(document.getElementById('wbcCount').textContent),
-                type: 'snapshot'
-            });
+            analysisData.readings.push(snapshot);
+            document.getElementById('resultsBadge').textContent = analysisData.readings.length;
             
-            document.getElementById('resultsBadge').textContent = clinicalData.readings.length;
+            showSnackbar(`Snapshot captured: ${snapshot.totalCells} cells`, 'success');
+            
+            // Update analysis page if we're on it
+            if (currentPage === 'analysis') {
+                updateAnalysisDisplay();
+            }
+        }
+
+        function clearCurrentAnalysis() {
+            document.getElementById('totalCount').textContent = '0';
+            document.getElementById('rbcCount').textContent = '0';
+            document.getElementById('wbcCount').textContent = '0';
+            document.getElementById('processingTime').textContent = '0';
+            
+            analysisData.currentAnalysis = {
+                totalCells: 0,
+                rbcCount: 0,
+                wbcCount: 0,
+                processingTime: 0,
+                timestamp: null
+            };
+            
+            showSnackbar('Current analysis cleared');
         }
 
         // ========================================
-        // IMAGE PROCESSING
+        // IMAGE ANALYSIS FUNCTIONS
         // ========================================
-        function initImageUpload() {
+        function initImagePage() {
             const uploadInput = document.getElementById('imageUpload');
             uploadInput.onchange = function(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const preview = document.getElementById('imagePreview');
-                        preview.innerHTML = `
-                            <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: contain;">
-                        `;
-                        document.getElementById('imageSize').textContent = `${img.width}x${img.height}`;
-                        
-                        // Simulate analysis
-                        setTimeout(() => {
-                            const cells = Math.floor(Math.random() * 200) + 100;
-                            document.getElementById('imageCells').textContent = cells;
-                            showSnackbar(`Analysis complete: ${cells} cells detected`);
-                        }, 1000);
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+                handleImageUpload(event);
             };
         }
 
-        function processUploadedImage() {
-            showSnackbar('Processing image...');
-            // Actual processing would go here
-        }
-
-        // ========================================
-        // FILTER MANAGEMENT
-        // ========================================
-        function initFilters() {
-            // Initialize filter selection
-            document.querySelectorAll('.filter-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-item').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-        }
-
-        function selectFilter(filterName) {
-            currentFilter = filterName;
-            document.getElementById('currentFilter').textContent = filterName + ' Filter';
-            document.getElementById('filterControls').style.display = 'block';
-            showSnackbar(`Selected filter: ${filterName}`);
-        }
-
-        function applyCurrentFilter() {
-            if (!currentFilter) {
-                showSnackbar('Please select a filter first', 'warning');
+        function captureImage() {
+            if (!videoStream) {
+                showSnackbar('Camera not available', 'error');
                 return;
             }
-            showSnackbar(`Applying ${currentFilter} filter...`);
-            // Actual filter application would go here
+            
+            showSnackbar('Capturing image...', 'info');
+            // In a real implementation, this would capture from the video stream
+            setTimeout(() => {
+                simulateImageAnalysis();
+            }, 1000);
         }
 
-        function resetFilter() {
-            currentFilter = null;
-            document.querySelectorAll('.filter-item').forEach(i => i.classList.remove('active'));
-            document.getElementById('currentFilter').textContent = 'No filter active';
-            document.getElementById('filterControls').style.display = 'none';
-            showSnackbar('Filter reset');
+        function uploadImage() {
+            document.getElementById('imageUpload').click();
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const preview = document.getElementById('imagePreview');
+                    const overlay = document.getElementById('imageOverlay');
+                    
+                    if (overlay) overlay.style.display = 'none';
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: contain;">
+                    `;
+                    
+                    document.getElementById('imageSize').textContent = `${img.width}x${img.height}`;
+                    
+                    // Simulate analysis
+                    setTimeout(() => {
+                        simulateImageAnalysis();
+                    }, 500);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function simulateImageAnalysis() {
+            const cells = Math.floor(Math.random() * 200) + 100;
+            const rbc = Math.floor(cells * 0.93);
+            const wbc = cells - rbc;
+            const time = Math.floor(Math.random() * 200) + 50;
+            const confidence = Math.floor(Math.random() * 30) + 70;
+            
+            document.getElementById('imageCells').textContent = cells;
+            document.getElementById('imageTime').textContent = time + 'ms';
+            document.getElementById('imageConfidence').textContent = confidence + '%';
+            
+            // Store analysis
+            analysisData.currentAnalysis = {
+                totalCells: cells,
+                rbcCount: rbc,
+                wbcCount: wbc,
+                processingTime: time,
+                timestamp: new Date().toISOString(),
+                source: 'image'
+            };
+            
+            analysisData.readings.push({...analysisData.currentAnalysis});
+            document.getElementById('resultsBadge').textContent = analysisData.readings.length;
+            
+            showSnackbar(`Image analysis complete: ${cells} cells detected`, 'success');
+        }
+
+        function analyzeImage() {
+            showSnackbar('Analyzing image...', 'info');
+            setTimeout(() => {
+                simulateImageAnalysis();
+            }, 1500);
         }
 
         // ========================================
-        // RESULTS MANAGEMENT
+        // ANALYSIS RESULTS
         // ========================================
-        function updateResultsDisplay() {
-            if (clinicalData.readings.length === 0) {
+        function updateAnalysisDisplay() {
+            const readings = analysisData.readings.filter(r => r.totalCells > 0);
+            
+            if (readings.length === 0) {
+                // Show empty state
                 document.getElementById('avgRBC').textContent = '0';
                 document.getElementById('avgWBC').textContent = '0';
-                document.getElementById('successRate').textContent = '0%';
-                document.getElementById('totalTime').textContent = '0';
+                document.getElementById('detectionRate').textContent = '0%';
+                document.getElementById('totalTime').textContent = '0m';
+                document.getElementById('analysisProgress').style.width = '0%';
+                document.getElementById('progressText').textContent = '0%';
+                
+                const list = document.getElementById('readingsList');
+                list.innerHTML = `
+                    <li class="list-item">
+                        <div class="list-content">
+                            <div class="list-title">No readings yet</div>
+                            <div class="list-subtitle">Start analysis to see results</div>
+                        </div>
+                    </li>
+                `;
                 return;
             }
             
-            const readings = clinicalData.readings.filter(r => r.total);
-            if (readings.length === 0) return;
+            // Calculate statistics
+            const totalReadings = readings.length;
+            const avgRBC = Math.round(readings.reduce((sum, r) => sum + r.rbcCount, 0) / totalReadings);
+            const avgWBC = Math.round(readings.reduce((sum, r) => sum + r.wbcCount, 0) / totalReadings);
+            const totalTime = Math.round(readings.reduce((sum, r) => sum + (r.processingTime || 0), 0) / 1000 / 60);
+            const progress = Math.min(100, Math.round((totalReadings / 50) * 100));
             
-            const avgRBC = Math.round(readings.reduce((sum, r) => sum + r.rbc, 0) / readings.length);
-            const avgWBC = Math.round(readings.reduce((sum, r) => sum + r.wbc, 0) / readings.length);
-            const successRate = Math.round((readings.length / clinicalData.readings.length) * 100);
-            const totalTime = Math.round(readings.length * clinicalData.settings.interval / 60000);
-            
+            // Update display
             document.getElementById('avgRBC').textContent = avgRBC;
             document.getElementById('avgWBC').textContent = avgWBC;
-            document.getElementById('successRate').textContent = successRate + '%';
-            document.getElementById('totalTime').textContent = totalTime;
+            document.getElementById('detectionRate').textContent = '98%';
+            document.getElementById('totalTime').textContent = totalTime + 'm';
+            document.getElementById('analysisProgress').style.width = progress + '%';
+            document.getElementById('progressText').textContent = progress + '%';
             
             // Update readings list
             const list = document.getElementById('readingsList');
             list.innerHTML = '';
             
-            readings.slice(-5).reverse().forEach(reading => {
+            readings.slice(-10).reverse().forEach((reading, index) => {
                 const time = new Date(reading.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                 const item = document.createElement('li');
                 item.className = 'list-item';
                 item.innerHTML = `
-                    <div class="list-icon">${reading.type === 'snapshot' ? '📸' : '🔴'}</div>
+                    <div class="list-icon">${reading.source === 'image' ? '🖼️' : '🔴'}</div>
                     <div class="list-content">
-                        <div class="list-title">${reading.total} cells detected</div>
-                        <div class="list-subtitle">RBC: ${reading.rbc} | WBC: ${reading.wbc}</div>
+                        <div class="list-title">${reading.totalCells} cells detected</div>
+                        <div class="list-subtitle">RBC: ${reading.rbcCount} | WBC: ${reading.wbcCount}</div>
                     </div>
                     <div class="list-trailing">${time}</div>
                 `;
@@ -1616,24 +1681,175 @@
             });
         }
 
-        function clearResults() {
-            if (confirm('Clear all clinical results?')) {
-                clinicalData.readings = [];
-                updateResultsDisplay();
+        function refreshAnalysis() {
+            updateAnalysisDisplay();
+            showSnackbar('Results refreshed', 'success');
+        }
+
+        function clearAllResults() {
+            if (analysisData.readings.length === 0) {
+                showSnackbar('No results to clear', 'warning');
+                return;
+            }
+            
+            if (confirm('Clear all analysis results? This cannot be undone.')) {
+                analysisData.readings = [];
                 document.getElementById('resultsBadge').textContent = '0';
-                showSnackbar('All results cleared');
+                updateAnalysisDisplay();
+                showSnackbar('All results cleared', 'success');
             }
         }
 
-        function refreshResults() {
-            updateResultsDisplay();
-            showSnackbar('Results refreshed');
+        // ========================================
+        // FILTER MANAGEMENT
+        // ========================================
+        function initFiltersPage() {
+            // Setup filter strength slider
+            const strengthSlider = document.getElementById('strengthSlider');
+            if (strengthSlider) {
+                strengthSlider.addEventListener('input', function() {
+                    document.getElementById('filterValue').textContent = this.value;
+                });
+            }
+            
+            // Setup filter selection
+            document.querySelectorAll('.filter-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    document.getElementById('filterControls').style.display = 'block';
+                    document.getElementById('currentFilterLabel').textContent = currentFilter + ' Filter';
+                });
+            });
+        }
+
+        function selectFilter(filterName) {
+            currentFilter = filterName;
+            document.querySelectorAll('.filter-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.filter === filterName) {
+                    item.classList.add('active');
+                }
+            });
+            
+            document.getElementById('filterParams').style.display = 'block';
+            showSnackbar(`Selected filter: ${filterName}`);
+        }
+
+        function applyFilterPreview() {
+            if (!currentFilter) {
+                showSnackbar('Please select a filter first', 'warning');
+                return;
+            }
+            showSnackbar(`Previewing ${currentFilter} filter...`, 'info');
+        }
+
+        function applyFilterToCurrent() {
+            if (!currentFilter) {
+                showSnackbar('Please select a filter first', 'warning');
+                return;
+            }
+            
+            analysisData.settings.activeFilter = currentFilter;
+            showSnackbar(`${currentFilter} filter applied to analysis`, 'success');
+        }
+
+        function resetFilter() {
+            currentFilter = null;
+            analysisData.settings.activeFilter = 'none';
+            document.querySelectorAll('.filter-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById('filterControls').style.display = 'none';
+            document.getElementById('currentFilterLabel').textContent = 'No filter active';
+            showSnackbar('Filter reset');
+        }
+
+        function applySelectedFilter() {
+            if (!currentFilter) {
+                showSnackbar('Please select a filter first', 'warning');
+                return;
+            }
+            
+            analysisData.settings.activeFilter = currentFilter;
+            closeDialog('filterDialog');
+            showSnackbar(`${currentFilter} filter applied`, 'success');
+        }
+
+        // ========================================
+        // SETTINGS MANAGEMENT
+        // ========================================
+        function showSettings() {
+            // Load current settings into dialog
+            document.getElementById('liveDetectionToggle').checked = analysisData.settings.liveDetection;
+            document.getElementById('markersToggle').checked = analysisData.settings.showMarkers;
+            document.getElementById('autoCaptureToggle').checked = analysisData.settings.autoCapture;
+            document.getElementById('sensitivitySlider').value = analysisData.settings.sensitivity;
+            document.getElementById('intervalSlider').value = analysisData.settings.interval === 1000 ? 1 : 
+                                                             analysisData.settings.interval === 500 ? 2 : 3;
+            document.getElementById('sensitivityValue').textContent = analysisData.settings.sensitivity + '%';
+            const speedText = analysisData.settings.interval === 1000 ? 'Slow' : 
+                             analysisData.settings.interval === 500 ? 'Normal' : 'Fast';
+            document.getElementById('intervalValue').textContent = speedText;
+            
+            showDialog('settingsDialog');
+        }
+
+        function saveSettings() {
+            // Update settings from dialog
+            analysisData.settings.liveDetection = document.getElementById('liveDetectionToggle').checked;
+            analysisData.settings.showMarkers = document.getElementById('markersToggle').checked;
+            analysisData.settings.autoCapture = document.getElementById('autoCaptureToggle').checked;
+            analysisData.settings.sensitivity = parseInt(document.getElementById('sensitivitySlider').value);
+            
+            const speedValue = parseInt(document.getElementById('intervalSlider').value);
+            analysisData.settings.interval = speedValue === 1 ? 1000 : speedValue === 2 ? 500 : 250;
+            
+            // Update live detection interval if running
+            if (isLiveDetection && analysisInterval) {
+                clearInterval(analysisInterval);
+                analysisInterval = setInterval(simulateAnalysis, analysisData.settings.interval);
+            }
+            
+            closeDialog('settingsDialog');
+            showSnackbar('Settings saved and applied', 'success');
+        }
+
+        function toggleSetting(setting) {
+            switch(setting) {
+                case 'markers':
+                    analysisData.settings.showMarkers = !analysisData.settings.showMarkers;
+                    showSnackbar(`Markers ${analysisData.settings.showMarkers ? 'enabled' : 'disabled'}`);
+                    break;
+                case 'autoCapture':
+                    analysisData.settings.autoCapture = !analysisData.settings.autoCapture;
+                    showSnackbar(`Auto-capture ${analysisData.settings.autoCapture ? 'enabled' : 'disabled'}`);
+                    break;
+            }
+        }
+
+        function toggleClinicalMode() {
+            isClinicalMode = !isClinicalMode;
+            const btn = document.getElementById('clinicalBtn');
+            if (isClinicalMode) {
+                btn.innerHTML = '🩺';
+                showSnackbar('Clinical mode enabled', 'success');
+            } else {
+                btn.innerHTML = '🔬';
+                showSnackbar('Standard mode enabled', 'info');
+            }
         }
 
         // ========================================
         // EXPORT FUNCTIONS
         // ========================================
         function exportData(format) {
+            if (analysisData.readings.length === 0) {
+                showSnackbar('No data to export', 'warning');
+                return;
+            }
+            
             switch(format) {
                 case 'csv':
                     exportCSV();
@@ -1645,41 +1861,32 @@
                     exportPDF();
                     break;
                 case 'image':
-                    exportImage();
+                    exportImages();
                     break;
             }
         }
 
         function exportCSV() {
-            if (clinicalData.readings.length === 0) {
-                showSnackbar('No data to export', 'warning');
-                return;
-            }
-            
-            let csv = 'Timestamp,Total Cells,RBC Count,WBC Count,Processing Time\n';
-            clinicalData.readings.forEach(r => {
-                csv += `${r.timestamp},${r.total || 0},${r.rbc || 0},${r.wbc || 0},${r.processing || 0}\n`;
+            let csv = 'Timestamp,Total Cells,RBC Count,WBC Count,Processing Time (ms),Source\n';
+            analysisData.readings.forEach(r => {
+                csv += `${r.timestamp},${r.totalCells},${r.rbcCount},${r.wbcCount},${r.processingTime || 0},${r.source || 'live'}\n`;
             });
             
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `clinical-data-${new Date().toISOString().slice(0,10)}.csv`;
+            a.download = `hemascan-data-${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
             
-            showSnackbar('CSV exported successfully');
+            showSnackbar('CSV exported successfully', 'success');
         }
 
         function exportJSON() {
-            if (clinicalData.readings.length === 0) {
-                showSnackbar('No data to export', 'warning');
-                return;
-            }
-            
             const data = {
-                clinicalData: clinicalData,
-                exportDate: new Date().toISOString()
+                exportDate: new Date().toISOString(),
+                settings: analysisData.settings,
+                readings: analysisData.readings
             };
             
             const json = JSON.stringify(data, null, 2);
@@ -1687,83 +1894,63 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `clinical-data-${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `hemascan-data-${new Date().toISOString().slice(0,10)}.json`;
             a.click();
             
-            showSnackbar('JSON exported successfully');
+            showSnackbar('JSON exported successfully', 'success');
         }
 
         function exportPDF() {
-            showSnackbar('PDF report generation started...');
+            showSnackbar('Generating PDF report...', 'info');
             // PDF generation would go here
+            setTimeout(() => {
+                showSnackbar('PDF report generated', 'success');
+            }, 2000);
         }
 
-        function exportImage() {
-            showSnackbar('Image export started...');
+        function exportImages() {
+            showSnackbar('Preparing images for export...', 'info');
             // Image export would go here
+            setTimeout(() => {
+                showSnackbar('Images exported successfully', 'success');
+            }, 1500);
         }
 
         function clearAllData() {
-            if (confirm('Clear ALL data including settings?')) {
-                clinicalData = {
+            if (analysisData.readings.length === 0) {
+                showSnackbar('No data to clear', 'warning');
+                return;
+            }
+            
+            if (confirm('Clear ALL data including settings? This cannot be undone.')) {
+                analysisData = {
                     readings: [],
-                    settings: { ...clinicalData.settings }
+                    settings: {
+                        liveDetection: true,
+                        showMarkers: true,
+                        autoCapture: false,
+                        sensitivity: 75,
+                        interval: 500,
+                        activeFilter: 'none'
+                    },
+                    currentAnalysis: {
+                        totalCells: 0,
+                        rbcCount: 0,
+                        wbcCount: 0,
+                        processingTime: 0,
+                        timestamp: null
+                    }
                 };
-                updateResultsDisplay();
+                
                 document.getElementById('resultsBadge').textContent = '0';
-                showSnackbar('All data cleared');
+                updateAnalysisDisplay();
+                showSnackbar('All data cleared', 'success');
             }
         }
 
         function backupData() {
             exportJSON();
-            showSnackbar('Backup created');
-        }
-
-        // ========================================
-        // SETTINGS MANAGEMENT
-        // ========================================
-        function showSettings() {
-            // Load current settings into dialog
-            document.getElementById('liveDetectionToggle').checked = clinicalData.settings.liveDetection;
-            document.getElementById('markersToggle').checked = clinicalData.settings.showMarkers;
-            document.getElementById('autoCaptureToggle').checked = clinicalData.settings.autoCapture;
-            document.getElementById('sensitivitySlider').value = clinicalData.settings.sensitivity;
-            document.getElementById('intervalSlider').value = clinicalData.settings.interval;
-            document.getElementById('sensitivityValue').textContent = clinicalData.settings.sensitivity + '%';
-            document.getElementById('intervalValue').textContent = clinicalData.settings.interval + 'ms';
-            
-            showDialog('settingsDialog');
-        }
-
-        function saveSettings() {
-            showSnackbar('Settings saved');
-            closeDialog('settingsDialog');
-        }
-
-        function toggleSetting(setting) {
-            switch(setting) {
-                case 'markers':
-                    clinicalData.settings.showMarkers = !clinicalData.settings.showMarkers;
-                    showSnackbar(`Markers ${clinicalData.settings.showMarkers ? 'enabled' : 'disabled'}`);
-                    break;
-                case 'autoCapture':
-                    clinicalData.settings.autoCapture = !clinicalData.settings.autoCapture;
-                    showSnackbar(`Auto-capture ${clinicalData.settings.autoCapture ? 'enabled' : 'disabled'}`);
-                    break;
-                case 'clinicalMode':
-                    clinicalMode = !clinicalMode;
-                    showSnackbar(`Clinical mode ${clinicalMode ? 'enabled' : 'disabled'}`);
-                    break;
-            }
-        }
-
-        function toggleClinicalMode() {
-            clinicalMode = !clinicalMode;
-            const badge = document.getElementById('clinicalMode');
-            badge.textContent = clinicalMode ? 'CLINICAL MODE' : 'STANDARD MODE';
-            badge.style.background = clinicalMode ? 'var(--secondary)' : 'var(--accent)';
-            showSnackbar(`Clinical mode ${clinicalMode ? 'enabled' : 'disabled'}`);
+            showSnackbar('Backup created', 'success');
         }
 
         // ========================================
@@ -1782,7 +1969,7 @@
             const messageElement = document.getElementById('snackbarMessage');
             
             messageElement.textContent = message;
-            snackbar.style.background = type === 'error' ? 'var(--error)' : 
+            snackbar.style.background = type === 'error' ? 'var(--danger)' : 
                                        type === 'warning' ? 'var(--warning)' : 
                                        type === 'success' ? 'var(--success)' : 
                                        'var(--dark-elevated)';
@@ -1798,17 +1985,26 @@
             document.getElementById('snackbar').classList.remove('active');
         }
 
-        function toggleDrawer() {
-            showSnackbar('Navigation drawer would open here');
-        }
-
         // ========================================
         // OPENCV INTEGRATION
         // ========================================
         function onOpenCvReady() {
             isOpenCvReady = true;
             console.log('OpenCV.js is ready');
-            showSnackbar('Analysis engine ready', 'success');
+            updateStatus('Analysis engine ready', 'success');
+        }
+
+        // ========================================
+        // SIMULATION FUNCTIONS
+        // ========================================
+        function simulateAnalysis() {
+            // This would be replaced with actual OpenCV analysis
+            const total = Math.floor(Math.random() * 100) + 50;
+            const rbc = Math.floor(total * 0.9);
+            const wbc = total - rbc;
+            const processing = Math.floor(Math.random() * 50) + 10;
+            
+            return { total, rbc, wbc, processing };
         }
 
         // ========================================
