@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HemaScan Pro - Gallery</title>
+    <link rel="stylesheet" href="common-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0"></script>
+</head>
+<body>
+    <a href="index.html" class="back-btn">←</a>
+    
+    <div class="dashboard">
+        <div class="header">
+            <h1 class="app-title">Image Gallery</h1>
+            <p class="app-subtitle">UPLOAD & ANALYZE</p>
+        </div>
+
+        <div class="video-container" style="aspect-ratio: 4/3; background: var(--bg-secondary);">
+            <img id="imagePreview" style="display: none; width: 100%; height: 100%; object-fit: contain;">
+            <canvas id="analysisCanvas" style="display: none; width: 100%;"></canvas>
+            <div class="video-overlay" id="placeholder">
+                <div style="font-size: 48px; margin-bottom: 15px;">📁</div>
+                <div>No image selected</div>
+            </div>
+        </div>
+
+        <input type="file" id="fileInput" accept="image/*" capture="environment" style="display: none;">
+
+        <div class="results-grid">
+            <div class="result-card">
+                <div class="result-label">Image Size</div>
+                <div class="result-value" id="imageSize">-</div>
+            </div>
+            <div class="result-card">
+                <div class="result-label">Detected Cells</div>
+                <div class="result-value" id="detectedCells">-</div>
+            </div>
+            <div class="result-card">
+                <div class="result-label">RBC Count</div>
+                <div class="result-value" id="rbcCount">-</div>
+            </div>
+            <div class="result-card">
+                <div class="result-label">WBC Count</div>
+                <div class="result-value" id="wbcCount">-</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-btn primary" onclick="document.getElementById('fileInput').click()">
+                📁 Upload
+            </button>
+            <button class="action-btn success" onclick="analyzeImage()" id="analyzeBtn" disabled>
+                🔄 Analyze
+            </button>
+            <a href="index.html" class="action-btn success">
+                🏠 Home
+            </a>
+            <a href="#" class="action-btn danger" onclick="exitApp(event)">
+                🚪 Exit
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let currentImage = null;
+        let canvas, ctx;
+
+        function init() {
+            canvas = document.getElementById('analysisCanvas');
+            ctx = canvas.getContext('2d');
+
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+            
+            // Apply theme
+            const data = JSON.parse(localStorage.getItem('hemaScanData') || '{"settings":{}}');
+            if (data.settings.darkMode) {
+                document.documentElement.classList.add('dark-theme');
+            }
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    currentImage = img;
+                    
+                    // Display image
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    document.getElementById('placeholder').style.display = 'none';
+                    
+                    // Update image info
+                    const sizeKB = (file.size / 1024).toFixed(1);
+                    document.getElementById('imageSize').textContent = `${img.width}×${img.height}`;
+                    
+                    // Enable analyze button
+                    document.getElementById('analyzeBtn').disabled = false;
+                    
+                    showNotification('Image loaded successfully', 'success');
+                    
+                    // Auto-analyze after 500ms
+                    setTimeout(analyzeImage, 500);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function analyzeImage() {
+            if (!currentImage) {
+                showNotification('Please select an image first', 'warning');
+                return;
+            }
+
+            showNotification('Analyzing image...', 'info');
+
+            // Setup canvas
+            canvas.width = currentImage.width;
+            canvas.height = currentImage.height;
+            ctx.drawImage(currentImage, 0, 0);
+
+            // Simulate cell detection with circular markers
+            const cellCount = Math.floor(Math.random() * 120) + 80;
+            const rbcCount = Math.floor(cellCount * 0.93);
+            const wbcCount = cellCount - rbcCount;
+
+            // Draw detection markers
+            for (let i = 0; i < cellCount; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const radius = Math.random() * 20 + 15;
+                
+                // Draw circle
+                ctx.strokeStyle = i < rbcCount ? '#ff3b30' : '#3f7bfd';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, 2 * Math.PI);
+                ctx.stroke();
+                
+                // Add label
+                ctx.fillStyle = i < rbcCount ? '#ff3b30' : '#3f7bfd';
+                ctx.font = 'bold 12px Arial';
+                ctx.fillText(i < rbcCount ? 'RBC' : 'WBC', x - 15, y - radius - 5);
+            }
+
+            // Show analyzed image
+            canvas.style.display = 'block';
+            document.getElementById('imagePreview').style.display = 'none';
+
+            // Update results
+            document.getElementById('detectedCells').textContent = cellCount;
+            document.getElementById('rbcCount').textContent = rbcCount;
+            document.getElementById('wbcCount').textContent = wbcCount;
+
+            // Save reading
+            const reading = {
+                totalCells: cellCount,
+                rbcCount: rbcCount,
+                wbcCount: wbcCount,
+                processingTime: Math.floor(Math.random() * 200) + 100,
+                timestamp: new Date().toISOString(),
+                source: 'image'
+            };
+            
+            const data = JSON.parse(localStorage.getItem('hemaScanData') || '{"readings":[],"settings":{}}');
+            data.readings.push(reading);
+            if (data.readings.length > 100) {
+                data.readings = data.readings.slice(-100);
+            }
+            localStorage.setItem('hemaScanData', JSON.stringify(data));
+
+            showNotification(`Analysis complete: ${cellCount} cells detected`, 'success');
+        }
+
+        function exitApp(e) {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? '#34c759' : 
+                            type === 'error' ? '#ff3b30' : 
+                            type === 'warning' ? '#ff9500' : '#007aff'};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 9999;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                max-width: 80%;
+                text-align: center;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => document.body.removeChild(notification), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

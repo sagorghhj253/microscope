@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HemaScan Pro - Home</title>
+    <link rel="stylesheet" href="common-styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="app-title">HemaScan Pro</h1>
+            <p class="app-subtitle">CLINICAL BLOOD ANALYSIS</p>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid">
+            <!-- Left Card: Live Camera -->
+            <div class="card gradient-card">
+                <div class="title">Live Analysis</div>
+                <div class="card-content">
+                    <div style="font-size: 40px;">🔬</div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="liveTotal">0</div>
+                            <div class="stat-label">Cells</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="liveRBC">0</div>
+                            <div class="stat-label">RBC</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="liveWBC">0</div>
+                            <div class="stat-label">WBC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Card: Results -->
+            <div class="card analysis-card">
+                <div class="title">
+                    AI Analysis <span class="dot"></span>
+                </div>
+                <div class="card-content">
+                    <div style="font-size: 40px;">⚕️</div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="analysisTotal">0</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="processingTime">0ms</div>
+                            <div class="stat-label">Speed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Icon Grid -->
+        <div class="icon-grid">
+            <!-- Camera Icon -->
+            <a href="camera.html" class="icon-box active">
+                <div>📷</div>
+                <div class="icon-label">Camera</div>
+            </a>
+
+            <!-- Gallery Icon -->
+            <a href="gallery.html" class="icon-box">
+                <div>🖼️</div>
+                <div class="icon-label">Gallery</div>
+            </a>
+
+            <!-- Analysis Icon -->
+            <a href="analysis.html" class="icon-box">
+                <div>📊</div>
+                <div class="icon-label">Analysis</div>
+            </a>
+
+            <!-- Filters Icon -->
+            <a href="filters.html" class="icon-box">
+                <div>🔧</div>
+                <div class="icon-label">Filters</div>
+            </a>
+
+            <!-- Export Icon -->
+            <a href="export.html" class="icon-box">
+                <div>📤</div>
+                <div class="icon-label">Export</div>
+            </a>
+
+            <!-- Settings Icon -->
+            <a href="settings.html" class="icon-box">
+                <div>⚙️</div>
+                <div class="icon-label">Settings</div>
+            </a>
+
+            <!-- Help Icon -->
+            <a href="help.html" class="icon-box">
+                <div>❓</div>
+                <div class="icon-label">Help</div>
+            </a>
+
+            <!-- Clinical Icon -->
+            <a href="#" class="icon-box" id="clinicalBtn" onclick="toggleClinicalMode(event)">
+                <div>🩺</div>
+                <div class="icon-label">Clinical</div>
+            </a>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="camera.html" class="action-btn primary">
+                ▶️ Start
+            </a>
+            <a href="#" class="action-btn danger" onclick="stopAnalysis(event)">
+                ⏸️ Stop
+            </a>
+            <a href="index.html" class="action-btn success">
+                🏠 Home
+            </a>
+            <a href="#" class="action-btn danger" onclick="exitApp(event)">
+                🚪 Exit
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Load saved data
+        function loadData() {
+            const data = JSON.parse(localStorage.getItem('hemaScanData') || '{"readings":[],"settings":{}}');
+            if (data.readings.length > 0) {
+                const lastReading = data.readings[data.readings.length - 1];
+                document.getElementById('liveTotal').textContent = lastReading.totalCells || 0;
+                document.getElementById('liveRBC').textContent = lastReading.rbcCount || 0;
+                document.getElementById('liveWBC').textContent = lastReading.wbcCount || 0;
+                document.getElementById('analysisTotal').textContent = lastReading.totalCells || 0;
+                document.getElementById('processingTime').textContent = (lastReading.processingTime || 0) + 'ms';
+            }
+            
+            // Apply theme
+            if (data.settings.darkMode) {
+                document.documentElement.classList.add('dark-theme');
+            }
+        }
+
+        function toggleClinicalMode(e) {
+            e.preventDefault();
+            const isDark = document.documentElement.classList.toggle('dark-theme');
+            const btn = document.getElementById('clinicalBtn');
+            
+            if (isDark) {
+                btn.querySelector('div:first-child').textContent = '🩺';
+                btn.querySelector('.icon-label').textContent = 'Clinical';
+                showNotification('Clinical mode (Dark theme) enabled', 'success');
+            } else {
+                btn.querySelector('div:first-child').textContent = '🔬';
+                btn.querySelector('.icon-label').textContent = 'Standard';
+                showNotification('Standard mode (Light theme) enabled', 'info');
+            }
+            
+            // Save preference
+            const data = JSON.parse(localStorage.getItem('hemaScanData') || '{"readings":[],"settings":{}}');
+            data.settings.darkMode = isDark;
+            localStorage.setItem('hemaScanData', JSON.stringify(data));
+        }
+
+        function stopAnalysis(e) {
+            e.preventDefault();
+            showNotification('Analysis stopped', 'info');
+        }
+
+        function exitApp(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to exit HemaScan Pro?')) {
+                window.close();
+                // If window.close() doesn't work (browser restrictions), show message
+                setTimeout(() => {
+                    showNotification('Please close the browser tab manually', 'info');
+                }, 100);
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? '#34c759' : 
+                            type === 'error' ? '#ff3b30' : 
+                            type === 'warning' ? '#ff9500' : '#007aff'};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 9999;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                animation: slideDown 0.3s ease-out;
+                max-width: 80%;
+                text-align: center;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s ease-in';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add CSS for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from { top: -100px; opacity: 0; }
+                to { top: 20px; opacity: 1; }
+            }
+            @keyframes slideUp {
+                from { top: 20px; opacity: 1; }
+                to { top: -100px; opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>
