@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HemaScan Pro - Help</title>
+    <link rel="stylesheet" href="common-styles.css">
+    <style>
+        .help-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .dark-mode .help-section {
+            background: #333;
+            color: #fff;
+        }
+
+        .help-section h3 {
+            color: #3f7bfd;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dark-mode .help-section h3 {
+            color: #6ea8ff;
+        }
+
+        .help-section p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .help-section p {
+            color: #ccc;
+        }
+
+        .help-section ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .help-section li {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .dark-mode .help-section li {
+            color: #ccc;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .dark-mode .warning-box {
+            background: #3d3100;
+            border-left-color: #ffc107;
+        }
+
+        .warning-box p {
+            color: #856404;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .dark-mode .warning-box p {
+            color: #ffc107;
+        }
+
+        .step-number {
+            display: inline-flex;
+            width: 24px;
+            height: 24px;
+            background: #3f7bfd;
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1 class="app-title">❓ Help & Guide</h1>
+            <p class="app-subtitle">USER MANUAL</p>
+        </div>
+
+        <div style="max-height: 500px; overflow-y: auto; padding-right: 10px;">
+            <div class="help-section">
+                <h3>📷 Live Camera Analysis</h3>
+                <p><strong>How to use:</strong></p>
+                <ul>
+                    <li><span class="step-number">1</span>Tap the Camera icon from the main dashboard</li>
+                    <li><span class="step-number">2</span>Grant camera permissions when prompted</li>
+                    <li><span class="step-number">3</span>Press "Start Detection" to begin real-time analysis</li>
+                    <li><span class="step-number">4</span>Point camera at blood smear slide under microscope</li>
+                    <li><span class="step-number">5</span>Green circles will appear around detected cells (RBC)</li>
+                    <li><span class="step-number">6</span>Red circles indicate white blood cells (WBC)</li>
+                    <li><span class="step-number">7</span>Tap "Capture" to save snapshot with annotations</li>
+                </ul>
+                <div class="warning-box">
+                    <p>⚠️ Ensure proper lighting and focus for best results. Keep camera stable during detection.</p>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <h3>🖼️ Gallery Analysis</h3>
+                <p><strong>How to use:</strong></p>
+                <ul>
+                    <li><span class="step-number">1</span>Tap the Gallery icon</li>
+                    <li><span class="step-number">2</span>Tap "Select Image" to open your device gallery</li>
+                    <li><span class="step-number">3</span>Choose a blood smear image</li>
+                    <li><span class="step-number">4</span>Wait for automatic analysis to complete</li>
+                    <li><span class="step-number">5</span>View detected cells marked with colored circles</li>
+                    <li><span class="step-number">6</span>Check statistics: total cells, RBC/WBC ratio, confidence</li>
+                </ul>
+                <div class="warning-box">
+                    <p>⚠️ Use high-resolution images (minimum 800x600) for accurate detection.</p>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <h3>📊 Analysis Reports</h3>
+                <p><strong>View your history:</strong></p>
+                <ul>
+                    <li>See last 5 analysis sessions with detailed statistics</li>
+                    <li>View average RBC and WBC counts over time</li>
+                    <li>Track trends with visual indicators</li>
+                    <li>Monitor success rate and processing performance</li>
+                    <li>Each report shows: date, time, cell counts, and source</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>🔧 Image Filters</h3>
+                <p><strong>Enhance detection accuracy:</strong></p>
+                <ul>
+                    <li><strong>Live Filter:</strong> Apply real-time filters to camera feed</li>
+                    <li><strong>Gallery Filter:</strong> Process saved images with filters</li>
+                    <li><strong>Available Filters:</strong>
+                        <ul>
+                            <li>Grayscale - Convert to black & white</li>
+                            <li>Contrast - Enhance cell visibility</li>
+                            <li>Brightness - Adjust image lighting</li>
+                            <li>Threshold - Isolate cells from background</li>
+                            <li>Edge Detection - Highlight cell boundaries</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>📤 Export Data</h3>
+                <p><strong>Save and share results:</strong></p>
+                <ul>
+                    <li>Export all analysis data as CSV file</li>
+                    <li>Choose which fields to include in export</li>
+                    <li>Preview data before exporting</li>
+                    <li>Share directly via messaging or email apps</li>
+                    <li>CSV files can be opened in Excel or Google Sheets</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>⚙️ Settings</h3>
+                <p><strong>Customize your experience:</strong></p>
+                <ul>
+                    <li><strong>Display:</strong> Toggle dark mode, cell markers, statistics</li>
+                    <li><strong>Detection:</strong> Adjust sensitivity (0-100%), processing speed</li>
+                    <li><strong>Camera:</strong> Set resolution quality, flash mode</li>
+                    <li><strong>Data:</strong> Enable auto-save, manage storage</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>🩺 Clinical Mode</h3>
+                <p><strong>Professional interface:</strong></p>
+                <ul>
+                    <li>Switches interface to dark theme for reduced eye strain</li>
+                    <li>Optimized for clinical laboratory environments</li>
+                    <li>Enhanced contrast for better visibility</li>
+                    <li>Toggle between Standard and Clinical modes anytime</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>💡 Best Practices</h3>
+                <ul>
+                    <li>✓ Use proper microscope lighting (bright field recommended)</li>
+                    <li>✓ Ensure blood smear is properly stained</li>
+                    <li>✓ Focus camera/microscope before starting detection</li>
+                    <li>✓ Keep device stable during live analysis</li>
+                    <li>✓ Process multiple samples for accurate averages</li>
+                    <li>✓ Regularly backup your data using Export function</li>
+                    <li>✓ Clean camera lens for optimal image quality</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>⚠️ Important Disclaimer</h3>
+                <div class="warning-box">
+                    <p><strong>Medical Notice:</strong> HemaScan Pro is a screening tool and NOT a substitute for professional medical diagnosis. All results should be verified by qualified medical personnel using standard laboratory procedures. Do not make medical decisions based solely on this app.</p>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <h3>📞 Support</h3>
+                <p>For technical support or questions:</p>
+                <ul>
+                    <li>Email: support@hemascanpro.com</li>
+                    <li>Version: 1.0.0</li>
+                    <li>Last Updated: February 2026</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="action-buttons" style="margin-top: 20px;">
+            <button class="action-btn success" onclick="window.location.href='index.html'">
+                🏠 Home
+            </button>
+            <button class="action-btn danger" onclick="window.location.href='index.html'">
+                ❌ Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function checkClinicalMode() {
+            const clinicalMode = localStorage.getItem('clinicalMode') === 'true';
+            if (clinicalMode) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkClinicalMode();
+        });
+    </script>
+</body>
+</html>

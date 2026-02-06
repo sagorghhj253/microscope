@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HemaScan Pro - Filters</title>
+    <link rel="stylesheet" href="common-styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1 class="app-title">🔧 Image Filters</h1>
+            <p class="app-subtitle">ENHANCE DETECTION ACCURACY</p>
+        </div>
+
+        <div class="action-buttons" style="margin-bottom: 20px;">
+            <button class="action-btn primary" id="liveFilterBtn" onclick="selectMode('live')">
+                📷 Live Filter
+            </button>
+            <button class="action-btn" id="galleryFilterBtn" onclick="selectMode('gallery')">
+                🖼️ Gallery Filter
+            </button>
+        </div>
+
+        <!-- Live Filter Mode -->
+        <div id="liveMode" style="display: none;">
+            <div class="video-container" style="aspect-ratio: 4/3;">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="filterCanvas" style="width: 100%; position: absolute; top: 0; left: 0;"></canvas>
+                <div class="video-overlay" id="videoOverlay">
+                    <div class="spinner"></div>
+                    <div>Initializing camera...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Filter Mode -->
+        <div id="galleryMode" style="display: none;">
+            <div class="video-container" style="aspect-ratio: 4/3; background: #f0f2f5;">
+                <canvas id="imageCanvas" style="width: 100%;"></canvas>
+                <div class="video-overlay" id="placeholderOverlay">
+                    <div style="font-size: 48px; margin-bottom: 15px;">📁</div>
+                    <div>Select an image to apply filters</div>
+                </div>
+            </div>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+        </div>
+
+        <div class="filter-options">
+            <button class="filter-btn" onclick="selectFilter('none')">None</button>
+            <button class="filter-btn" onclick="selectFilter('grayscale')">Grayscale</button>
+            <button class="filter-btn" onclick="selectFilter('contrast')">Contrast</button>
+            <button class="filter-btn" onclick="selectFilter('brightness')">Brightness</button>
+            <button class="filter-btn" onclick="selectFilter('blur')">Blur</button>
+            <button class="filter-btn" onclick="selectFilter('sharpen')">Sharpen</button>
+            <button class="filter-btn" onclick="selectFilter('edge')">Edge</button>
+            <button class="filter-btn" onclick="selectFilter('invert')">Invert</button>
+            <button class="filter-btn" onclick="selectFilter('threshold')">Threshold</button>
+        </div>
+
+        <div class="content-section">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span class="section-title">Active Filter:</span>
+                <span id="activeFilter" style="color: #3f7bfd; font-weight: 600;">None</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="filterStrength" style="width: 50%"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #7a8ba9; margin-top: 5px;">
+                <span>Low</span>
+                <span>Strength</span>
+                <span>High</span>
+            </div>
+        </div>
+
+        <div class="action-buttons" id="galleryActions" style="display: none;">
+            <button class="action-btn primary" onclick="document.getElementById('imageUpload').click()">
+                📁 Select Image
+            </button>
+            <button class="action-btn success" onclick="applyFilter()">
+                ✓ Apply Filter
+            </button>
+        </div>
+
+        <div class="action-buttons" id="liveActions" style="display: none;">
+            <button class="action-btn primary" onclick="toggleLiveFilter()" id="toggleLiveBtn">
+                ▶️ Start
+            </button>
+            <button class="action-btn" onclick="resetFilter()">
+                🔄 Reset
+            </button>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-btn success" onclick="window.location.href='index.html'">
+                🏠 Home
+            </button>
+            <button class="action-btn danger" onclick="window.location.href='index.html'">
+                ❌ Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = null;
+        let currentFilter = 'none';
+        let currentImage = null;
+        let originalImageData = null;
+        let videoStream = null;
+        let isLiveFiltering = false;
+        let filterInterval = null;
+
+        function selectMode(mode) {
+            currentMode = mode;
+            
+            // Update buttons
+            if (mode === 'live') {
+                document.getElementById('liveFilterBtn').classList.add('primary');
+                document.getElementById('liveFilterBtn').classList.remove('action-btn');
+                document.getElementById('galleryFilterBtn').classList.remove('primary');
+                document.getElementById('galleryFilterBtn').classList.add('action-btn');
+                
+                document.getElementById('liveMode').style.display = 'block';
+                document.getElementById('galleryMode').style.display = 'none';
+                document.getElementById('liveActions').style.display = 'grid';
+                document.getElementById('galleryActions').style.display = 'none';
+                
+                initCamera();
+            } else {
+                document.getElementById('galleryFilterBtn').classList.add('primary');
+                document.getElementById('galleryFilterBtn').classList.remove('action-btn');
+                document.getElementById('liveFilterBtn').classList.remove('primary');
+                document.getElementById('liveFilterBtn').classList.add('action-btn');
+                
+                document.getElementById('galleryMode').style.display = 'block';
+                document.getElementById('liveMode').style.display = 'none';
+                document.getElementById('galleryActions').style.display = 'grid';
+                document.getElementById('liveActions').style.display = 'none';
+                
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop());
+                    videoStream = null;
+                }
+            }
+        }
+
+        async function initCamera() {
+            try {
+                const constraints = {
+                    video: {
+                        facingMode: 'environment',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    }
+                };
+
+                videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+                const video = document.getElementById('video');
+                video.srcObject = videoStream;
+
+                video.onloadeddata = () => {
+                    const canvas = document.getElementById('filterCanvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    document.getElementById('videoOverlay').style.display = 'none';
+                };
+            } catch (error) {
+                alert('Camera access denied.');
+                console.error('Camera error:', error);
+            }
+        }
+
+        function selectFilter(filter) {
+            currentFilter = filter;
+            document.getElementById('activeFilter').textContent = filter.charAt(0).toUpperCase() + filter.slice(1);
+            
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Apply filter if in gallery mode with image
+            if (currentMode === 'gallery' && currentImage) {
+                applyFilter();
+            }
+        }
+
+        // Handle image upload
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    currentImage = img;
+                    displayImage(img);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function displayImage(img) {
+            const canvas = document.getElementById('imageCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            
+            // Store original image data
+            originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            
+            document.getElementById('placeholderOverlay').style.display = 'none';
+            canvas.style.display = 'block';
+        }
+
+        function applyFilter() {
+            if (currentMode === 'gallery' && !currentImage) {
+                alert('Please select an image first!');
+                return;
+            }
+
+            if (currentMode === 'gallery') {
+                applyImageFilter();
+            }
+        }
+
+        function applyImageFilter() {
+            const canvas = document.getElementById('imageCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Restore original image
+            if (originalImageData) {
+                ctx.putImageData(originalImageData, 0, 0);
+            }
+            
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            switch(currentFilter) {
+                case 'grayscale':
+                    for (let i = 0; i < data.length; i += 4) {
+                        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                        data[i] = data[i + 1] = data[i + 2] = avg;
+                    }
+                    break;
+                    
+                case 'contrast':
+                    const contrast = 1.5;
+                    const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = factor * (data[i] - 128) + 128;
+                        data[i + 1] = factor * (data[i + 1] - 128) + 128;
+                        data[i + 2] = factor * (data[i + 2] - 128) + 128;
+                    }
+                    break;
+                    
+                case 'brightness':
+                    const brightness = 30;
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = Math.min(255, data[i] + brightness);
+                        data[i + 1] = Math.min(255, data[i + 1] + brightness);
+                        data[i + 2] = Math.min(255, data[i + 2] + brightness);
+                    }
+                    break;
+                    
+                case 'invert':
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = 255 - data[i];
+                        data[i + 1] = 255 - data[i + 1];
+                        data[i + 2] = 255 - data[i + 2];
+                    }
+                    break;
+                    
+                case 'threshold':
+                    const threshold = 128;
+                    for (let i = 0; i < data.length; i += 4) {
+                        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                        const val = avg > threshold ? 255 : 0;
+                        data[i] = data[i + 1] = data[i + 2] = val;
+                    }
+                    break;
+                    
+                case 'edge':
+                    // Simple edge detection
+                    const edge = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    for (let y = 1; y < canvas.height - 1; y++) {
+                        for (let x = 1; x < canvas.width - 1; x++) {
+                            const i = (y * canvas.width + x) * 4;
+                            const sobelX = -data[i - 4] + data[i + 4];
+                            const sobelY = -data[i - canvas.width * 4] + data[i + canvas.width * 4];
+                            const magnitude = Math.sqrt(sobelX * sobelX + sobelY * sobelY);
+                            edge.data[i] = edge.data[i + 1] = edge.data[i + 2] = magnitude;
+                        }
+                    }
+                    ctx.putImageData(edge, 0, 0);
+                    return;
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        function toggleLiveFilter() {
+            if (isLiveFiltering) {
+                stopLiveFilter();
+            } else {
+                startLiveFilter();
+            }
+        }
+
+        function startLiveFilter() {
+            if (!videoStream) {
+                alert('Camera not initialized!');
+                return;
+            }
+
+            isLiveFiltering = true;
+            document.getElementById('toggleLiveBtn').textContent = '⏸️ Stop';
+            
+            filterInterval = setInterval(() => {
+                applyLiveFilter();
+            }, 100);
+        }
+
+        function stopLiveFilter() {
+            isLiveFiltering = false;
+            document.getElementById('toggleLiveBtn').textContent = '▶️ Start';
+            
+            if (filterInterval) {
+                clearInterval(filterInterval);
+                filterInterval = null;
+            }
+            
+            const canvas = document.getElementById('filterCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function applyLiveFilter() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('filterCanvas');
+            const ctx = canvas.getContext('2d');
+
+            if (!video.videoWidth || !video.videoHeight) return;
+
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            if (currentFilter === 'none') return;
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            // Apply the selected filter (same logic as gallery)
+            switch(currentFilter) {
+                case 'grayscale':
+                    for (let i = 0; i < data.length; i += 4) {
+                        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                        data[i] = data[i + 1] = data[i + 2] = avg;
+                    }
+                    break;
+                    
+                case 'contrast':
+                    const factor = 2;
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = Math.min(255, data[i] * factor);
+                        data[i + 1] = Math.min(255, data[i + 1] * factor);
+                        data[i + 2] = Math.min(255, data[i + 2] * factor);
+                    }
+                    break;
+                    
+                case 'invert':
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = 255 - data[i];
+                        data[i + 1] = 255 - data[i + 1];
+                        data[i + 2] = 255 - data[i + 2];
+                    }
+                    break;
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        function resetFilter() {
+            currentFilter = 'none';
+            document.getElementById('activeFilter').textContent = 'None';
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if (currentMode === 'live' && isLiveFiltering) {
+                const canvas = document.getElementById('filterCanvas');
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            } else if (currentMode === 'gallery' && originalImageData) {
+                const canvas = document.getElementById('imageCanvas');
+                const ctx = canvas.getContext('2d');
+                ctx.putImageData(originalImageData, 0, 0);
+            }
+        }
+
+        function checkClinicalMode() {
+            const clinicalMode = localStorage.getItem('clinicalMode') === 'true';
+            if (clinicalMode) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkClinicalMode();
+        });
+
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HemaScan Pro - Dashboard</title>
+    <link rel="stylesheet" href="common-styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="app-title">HemaScan Pro</h1>
+            <p class="app-subtitle">CLINICAL BLOOD ANALYSIS</p>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid">
+            <!-- Left Card: Live Camera -->
+            <div class="card gradient-card" id="liveCard">
+                <div class="title">Live Analysis</div>
+                <div class="card-content">
+                    <div style="font-size: 40px;">🔬</div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="liveTotal">0</div>
+                            <div class="stat-label">Cells</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="liveRBC">0</div>
+                            <div class="stat-label">RBC</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="liveWBC">0</div>
+                            <div class="stat-label">WBC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Card: Results -->
+            <div class="card analysis-card" id="resultsCard">
+                <div class="title">
+                    AI Analysis <span class="dot"></span>
+                </div>
+                <div class="card-content">
+                    <div style="font-size: 40px;">⚕️</div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="analysisTotal">0</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="processingTime">0ms</div>
+                            <div class="stat-label">Speed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Icon Grid -->
+        <div class="icon-grid">
+            <!-- Camera Icon -->
+            <div class="icon-box active" onclick="window.location.href='camera.html'">
+                <div>📷</div>
+                <div class="icon-label">Camera</div>
+            </div>
+
+            <!-- Gallery Icon -->
+            <div class="icon-box" onclick="window.location.href='gallery.html'">
+                <div>🖼️</div>
+                <div class="icon-label">Gallery</div>
+            </div>
+
+            <!-- Analysis Icon -->
+            <div class="icon-box" onclick="window.location.href='analysis.html'">
+                <div>📊</div>
+                <div class="icon-label">Analysis</div>
+            </div>
+
+            <!-- Filters Icon -->
+            <div class="icon-box" onclick="window.location.href='filters.html'">
+                <div>🔧</div>
+                <div class="icon-label">Filters</div>
+            </div>
+
+            <!-- Export Icon -->
+            <div class="icon-box" onclick="window.location.href='export.html'">
+                <div>📤</div>
+                <div class="icon-label">Export</div>
+            </div>
+
+            <!-- Settings Icon -->
+            <div class="icon-box" onclick="window.location.href='settings.html'">
+                <div>⚙️</div>
+                <div class="icon-label">Settings</div>
+            </div>
+
+            <!-- Help Icon -->
+            <div class="icon-box" onclick="window.location.href='help.html'">
+                <div>❓</div>
+                <div class="icon-label">Help</div>
+            </div>
+
+            <!-- Clinical Icon -->
+            <div class="icon-box" onclick="window.location.href='clinical.html'">
+                <div>🩺</div>
+                <div class="icon-label">Clinical</div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn success" onclick="window.location.href='index.html'">
+                🏠 Home
+            </button>
+            <button class="action-btn danger" onclick="confirmExit()">
+                🚪 Exit
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Load saved data from localStorage
+        function loadDashboardData() {
+            const savedData = localStorage.getItem('hemaScanData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                if (data.readings && data.readings.length > 0) {
+                    const lastReading = data.readings[data.readings.length - 1];
+                    document.getElementById('liveTotal').textContent = lastReading.totalCells || 0;
+                    document.getElementById('liveRBC').textContent = lastReading.rbcCount || 0;
+                    document.getElementById('liveWBC').textContent = lastReading.wbcCount || 0;
+                    document.getElementById('analysisTotal').textContent = lastReading.totalCells || 0;
+                    document.getElementById('processingTime').textContent = (lastReading.processingTime || 0) + 'ms';
+                }
+            }
+        }
+
+        // Check if clinical mode is active
+        function checkClinicalMode() {
+            const clinicalMode = localStorage.getItem('clinicalMode') === 'true';
+            if (clinicalMode) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+
+        function confirmExit() {
+            if (confirm('Are you sure you want to exit HemaScan Pro?')) {
+                // Close window or go back
+                window.close();
+                // If that doesn't work, go to a blank page
+                setTimeout(() => {
+                    window.location.href = 'about:blank';
+                }, 100);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            checkClinicalMode();
+        });
+    </script>
+</body>
+</html>
