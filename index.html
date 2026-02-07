@@ -339,22 +339,48 @@
             overflow-y: auto;
         }
 
-        /* Camera Modal Specific */
+        /* Camera Modal Specific - UPDATED */
+        .camera-modal-content {
+            background: transparent !important;
+            border-radius: 0 !important;
+            max-width: 100% !important;
+            width: 100% !important;
+            height: 100% !important;
+            max-height: 100% !important;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .camera-header {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .camera-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
         .video-container {
             position: relative;
+            flex: 1;
             width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
             background: #000;
-            margin-bottom: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #video,
         #canvas {
             width: 100%;
-            height: 300px;
-            object-fit: cover;
-            display: block;
+            height: 100%;
+            object-fit: contain;
         }
 
         #canvas {
@@ -424,21 +450,141 @@
             }
         }
 
-        /* Gallery Modal Specific */
-        .image-container {
+        /* Camera Controls */
+        .camera-controls {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .control-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+        }
+
+        .control-btn.success {
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+            border-color: transparent;
+        }
+
+        .control-btn.danger {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            border-color: transparent;
+        }
+
+        .control-btn.warning {
+            background: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
+            border-color: transparent;
+        }
+
+        /* Stats Overlay */
+        .stats-overlay {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-overlay-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+
+        .stat-overlay-label {
+            font-size: 10px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Detection Overlay */
+        .detection-overlay {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 61, 113, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .detection-overlay.active {
+            background: rgba(76, 175, 80, 0.9);
+        }
+
+        /* FPS Counter */
+        .fps-counter {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #4CAF50;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        /* Gallery Modal Specific - UPDATED */
+        .fullscreen-image-container {
             position: relative;
             width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
+            height: 60vh;
             background: #000;
+            overflow: hidden;
             margin-bottom: 16px;
-            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #imagePreview {
-            width: 100%;
-            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
             display: none;
+        }
+
+        #imageCanvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
         .gallery-overlay {
@@ -457,6 +603,52 @@
         }
 
         body.clinical-mode .gallery-overlay {
+            background: #0f3460;
+            color: #ccc;
+        }
+
+        /* Filter Modal Specific - UPDATED */
+        .fullscreen-filter-container {
+            position: relative;
+            width: 100%;
+            height: 60vh;
+            background: #000;
+            overflow: hidden;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #filterPreview {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: none;
+        }
+
+        #filterCanvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .filter-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            color: #666;
+            background: #f0f0f0;
+        }
+
+        body.clinical-mode .filter-overlay {
             background: #0f3460;
             color: #ccc;
         }
@@ -540,43 +732,6 @@
         body.clinical-mode .filter-btn.active {
             background: #4CAF50;
             border-color: #4CAF50;
-        }
-
-        /* Filter Preview Section */
-        .filter-preview-container {
-            position: relative;
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            margin-bottom: 16px;
-            min-height: 200px;
-        }
-
-        #filterPreview {
-            width: 100%;
-            height: auto;
-            display: none;
-        }
-
-        .filter-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 12px;
-            color: #666;
-            background: #f0f0f0;
-        }
-
-        body.clinical-mode .filter-overlay {
-            background: #0f3460;
-            color: #ccc;
         }
 
         /* Filter Controls */
@@ -727,33 +882,6 @@
             display: none !important;
         }
 
-        /* FPS Counter */
-        .fps-counter {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #4CAF50;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: monospace;
-            z-index: 100;
-        }
-
-        /* Detection Overlay */
-        .detection-overlay {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #ff3d71;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            z-index: 100;
-        }
-
         /* Toggle Switch */
         .toggle-switch {
             position: relative;
@@ -815,6 +943,17 @@
                 grid-template-columns: repeat(3, 1fr);
                 gap: 6px;
             }
+
+            .camera-controls {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                padding: 12px;
+            }
+
+            .control-btn {
+                padding: 12px 6px;
+                font-size: 12px;
+            }
         }
 
         /* Loading Animation */
@@ -851,6 +990,97 @@
             background: #16213e;
             color: white;
         }
+
+        /* Zoom Controls */
+        .zoom-controls {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .zoom-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Pan Controls (NEW) */
+        .pan-controls {
+            position: absolute;
+            bottom: 16px;
+            right: 80px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 4px;
+        }
+
+        .pan-btn {
+            width: 30px;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .pan-btn:active {
+            transform: scale(0.95);
+        }
+
+        .pan-btn.center {
+            grid-column: 2;
+            grid-row: 2;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Zoom Level Display */
+        .zoom-level {
+            position: absolute;
+            bottom: 16px;
+            left: 70px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        /* Pan Position Display */
+        .pan-position {
+            position: absolute;
+            bottom: 50px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-family: monospace;
+        }
     </style>
 </head>
 
@@ -870,7 +1100,7 @@
                     <div class="stat-item">
                         <div class="stat-value" id="liveTotal">0</div>
                         <div class="stat-label">Cells</div>
-                    </div> 
+                    </div>
                 </div>
             </div>
 
@@ -938,58 +1168,70 @@
         </div>
     </div>
 
-    <!-- Camera Modal -->
+    <!-- Camera Modal - UPDATED -->
     <div class="modal" id="cameraModal">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content camera-modal-content">
+            <div class="camera-header">
+                <div class="camera-title">Live Camera</div>
                 <button class="close-btn" onclick="closeCameraModal()">×</button>
-                <div class="modal-title">Live Detection</div>
-                <div class="modal-subtitle">Real-time analysis</div>
             </div>
-            <div class="modal-body">
-                <div class="video-container">
-                    <video id="video" autoplay playsinline></video>
-                    <canvas id="canvas"></canvas>
-                    <div class="detection-overlay">DETECTION: OFF</div>
-                    <div class="fps-counter">FPS: 0</div>
-                    <div class="video-overlay" id="cameraOverlay">
-                        <div class="spinner"></div>
-                        <div>Initializing camera...</div>
+            <div class="video-container">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas"></canvas>
+                <div class="detection-overlay" id="detectionStatus">DETECTION: OFF</div>
+                <div class="stats-overlay">
+                    <div class="stat-overlay-item">
+                        <div class="stat-overlay-value" id="cameraTotal">0</div>
+                        <div class="stat-overlay-label">Total Cells</div>
                     </div>
+                   <!-- <div class="stat-overlay-item">
+                        <div class="stat-overlay-value" id="cameraRBC">0</div>
+                        <div class="stat-overlay-label">RBC</div>
+                   
+                    <div class="stat-overlay-item">
+                        <div class="stat-overlay-value" id="cameraWBC">0</div>
+                        <div class="stat-overlay-label">WBC</div>
+                    </div>  </div> --> 
                 </div>
-
-                <div class="results-grid">
-                    <div class="result-card">
-                        <div class="result-label">Total Cells</div>
-                        <div class="result-value" id="cameraTotal">0</div>
-                    </div>
-                 <!--   <div class="result-card">
-                        <div class="result-label">RBC Count</div>
-                        <div class="result-value" id="cameraRBC">0</div>
-                    </div>
-                        <div class="result-card">
-                        <div class="result-label">WBC Count</div>
-                        <div class="result-value" id="cameraWBC">0</div>
-                  </div> -->
-                    <div class="result-card">
-                        <div class="result-label">FPS</div>
-                        <div class="result-value" id="cameraFPS">0</div>
-                    </div>
+                <div class="fps-counter">FPS: 0</div>
+                <div class="pan-position" id="panPosition">X: 0, Y: 0</div>
+                <div class="zoom-level" id="zoomLevel">Zoom: 1.0x</div>
+                <div class="zoom-controls">
+                    <button class="zoom-btn" onclick="zoomIn()">+</button>
+                    <button class="zoom-btn" onclick="zoomOut()">-</button>
+                    <button class="zoom-btn" onclick="resetZoomAndPan()">⟲</button>
                 </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
-                    <button class="action-btn primary" onclick="startLiveDetection()" id="startDetectBtn">
-                        Start Detection
-                    </button>
-                    <button class="action-btn" onclick="captureSnapshot()">
-                        Capture
-                    </button>
+                <div class="pan-controls">
+                    <button class="pan-btn" style="visibility: hidden;"></button>
+                    <button class="pan-btn" onclick="panUp()">↑</button>
+                    <button class="pan-btn" style="visibility: hidden;"></button>
+                    <button class="pan-btn" onclick="panLeft()">←</button>
+                    <button class="pan-btn center" onclick="resetZoomAndPan()">◎</button>
+                    <button class="pan-btn" onclick="panRight()">→</button>
+                    <button class="pan-btn" style="visibility: hidden;"></button>
+                    <button class="pan-btn" onclick="panDown()">↓</button>
+                    <button class="pan-btn" style="visibility: hidden;"></button>
                 </div>
+                <div class="video-overlay" id="cameraOverlay">
+                    <div class="spinner"></div>
+                    <div>Initializing camera...</div>
+                </div>
+            </div>
+            <div class="camera-controls">
+                <button class="control-btn primary" onclick="startLiveDetection()" id="startDetectBtn">
+                    ▶ Start Detection
+                </button>
+                <button class="control-btn success" onclick="captureSnapshot()">
+                    📸 Capture
+                </button>
+                <button class="control-btn warning" onclick="toggleFlash()" id="flashBtn">
+                    ⚡ Flash Off
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Gallery Modal -->
+    <!-- Gallery Modal - UPDATED -->
     <div class="modal" id="galleryModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -998,7 +1240,7 @@
                 <div class="modal-subtitle">Upload blood smear images</div>
             </div>
             <div class="modal-body">
-                <div class="image-container">
+                <div class="fullscreen-image-container">
                     <img id="imagePreview" class="hidden">
                     <canvas id="imageCanvas"></canvas>
                     <div class="gallery-overlay" id="galleryPlaceholder">
@@ -1040,7 +1282,7 @@
         </div>
     </div>
 
-    <!-- Filters Modal - UPDATED from index1.html -->
+    <!-- Filters Modal - UPDATED -->
     <div class="modal" id="filtersModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1049,7 +1291,7 @@
                 <div class="modal-subtitle">Preview and apply filters</div>
             </div>
             <div class="modal-body">
-                <div class="filter-preview-container">
+                <div class="fullscreen-filter-container">
                     <img id="filterPreview" class="hidden">
                     <canvas id="filterCanvas"></canvas>
                     <div class="filter-overlay" id="filterPlaceholder">
@@ -1088,10 +1330,13 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
                     <button class="action-btn primary" onclick="document.getElementById('filterUpload').click()">
-                         Select Image
+                        Select Image
                     </button>
                     <button class="action-btn success" onclick="applyFilterToPreview()">
-                         Apply Filter
+                        Apply Filter
+                    </button>
+                    <button class="action-btn warning" onclick="saveFilteredImage()">
+                        💾 Save Image
                     </button>
                 </div>
             </div>
@@ -1137,6 +1382,7 @@
             </div>
         </div>
     </div>
+
     <!-- Settings Modal -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
@@ -1216,7 +1462,7 @@
             <div class="modal-header">
                 <button class="close-btn" onclick="closeHelpModal()">×</button>
                 <div class="modal-title">Help & Instructions</div>
-                <div class="modal-subtitle">Learn how to use HemaScan Pro</div>
+                <div class="modal-subtitle">Learn how to use MicroX</div>
             </div>
             <div class="modal-body">
                 <div class="help-content">
@@ -1226,7 +1472,8 @@
                             • Point camera at smear slide<br>
                             • Ensure good lighting<br>
                             • Hold steady for accurate detection<br>
-                            • Use "Select Area" to focus on specific region
+                            • Use zoom controls for detailed view<br>
+                            • Use pan controls to move around zoomed image
                         </div>
                     </div>
 
@@ -1235,8 +1482,9 @@
                         <div style="font-size: 13px; line-height: 1.5;">
                             • Upload smear images<br>
                             • Supported formats: JPG, PNG<br>
-                            • Select area for focused analysis<br>
-                            • Apply filters for better detection
+                            • Fullscreen preview available<br>
+                            • Apply filters for better detection<br>
+                            • Save filtered images for later use
                         </div>
                     </div>
 
@@ -1247,15 +1495,15 @@
                             • Median: Salt & pepper noise removal<br>
                             • Edge: Highlight cell boundaries<br>
                             • Threshold: Binary conversion<br>
-                            • Adjust kernel and sigma for fine-tuning
+                            • Adjust kernel and sigma for fine-tuning<br>
+                            • Save filtered images with "Save Image" button
                         </div>
                     </div>
 
                     <div class="help-section">
                         <div class="help-title">Understanding Results</div>
                         <div style="font-size: 13px; line-height: 1.5;">
-                            •For example, if you see:<br>
-                            •RBC (Red Blood Cells): Normal range 4.5-5.5 million/μL<br>
+                            • RBC (Red Blood Cells): Normal range 4.5-5.5 million/μL<br>
                             • WBC (White Blood Cells): Normal range 4,000-11,000/μL<br>
                             • Total Cells: Combined count in view<br>
                             • Confidence: Detection accuracy percentage
@@ -1273,6 +1521,7 @@
             </div>
         </div>
     </div>
+
     <!-- OpenCV Loading Overlay -->
     <div id="opencvLoader" class="opencv-loading">
         <div class="spinner"></div>
@@ -1301,7 +1550,15 @@
         let clinicalMode = false;
         let isOpenCvReady = false;
         let cv = null;
-        let detectionModel = null;
+        let zoomLevel = 1.0;
+        let isFlashOn = false;
+        let videoTrack = null;
+        
+        // NEW: Pan variables
+        let panX = 0;
+        let panY = 0;
+        let maxPan = 100;
+        let panStep = 20;
 
         let settings = {
             sensitivity: 75,
@@ -1310,7 +1567,7 @@
             analysisInterval: 500
         };
 
-        // Filter parameters (from index1.html)
+        // Filter parameters
         let filterParams = {
             kernelSize: 3,
             sigma: 1.0,
@@ -1350,9 +1607,6 @@
             // Load saved data
             loadSavedData();
 
-            // Initialize camera preview
-            initCameraPreview();
-
             // Update UI with loaded settings
             updateSettingsUI();
         });
@@ -1361,10 +1615,10 @@
             // Image upload handling
             document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
 
-            // Filter upload handling (from index1.html)
+            // Filter upload handling
             document.getElementById('filterUpload').addEventListener('change', handleFilterUpload);
 
-            // Filter button clicks (from index1.html)
+            // Filter button clicks
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.addEventListener('click', function () {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1376,7 +1630,7 @@
                 });
             });
 
-            // Filter controls (from index1.html)
+            // Filter controls
             document.getElementById('kernelSlider').addEventListener('input', function () {
                 filterParams.kernelSize = parseInt(this.value);
                 document.getElementById('kernelValue').textContent = this.value;
@@ -1416,25 +1670,6 @@
             });
         }
 
-        async function initCameraPreview() {
-            // Initialize camera when modal opens
-            const video = document.getElementById('video');
-            const overlay = document.getElementById('cameraOverlay');
-
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' }
-                });
-                video.srcObject = stream;
-                video.onloadedmetadata = () => {
-                    overlay.classList.add('hidden');
-                };
-            } catch (err) {
-                console.error('Camera error:', err);
-                overlay.innerHTML = '<div>Camera access denied. Please enable camera permissions.</div>';
-            }
-        }
-
         // ========================================
         // MODAL MANAGEMENT
         // ========================================
@@ -1446,6 +1681,7 @@
         function closeCameraModal() {
             document.getElementById('cameraModal').classList.remove('active');
             stopCamera();
+            resetZoomAndPan();
         }
 
         function openGalleryModal() {
@@ -1454,15 +1690,6 @@
 
         function closeGalleryModal() {
             document.getElementById('galleryModal').classList.remove('active');
-        }
-
-        function openAnalysisModal() {
-            updateAnalysisDisplay();
-            document.getElementById('analysisModal').classList.add('active');
-        }
-
-        function closeAnalysisModal() {
-            document.getElementById('analysisModal').classList.remove('active');
         }
 
         function openFiltersModal() {
@@ -1498,32 +1725,38 @@
         }
 
         // ========================================
-        // CAMERA FUNCTIONS WITH ACCURATE DETECTION
+        // CAMERA FUNCTIONS WITH FULLSCREEN VIEW
         // ========================================
         async function startCamera() {
             try {
                 const constraints = {
                     video: {
                         facingMode: 'environment',
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 },
-                        frameRate: { ideal: 30 }
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 },
+                        frameRate: { ideal: 60 }
                     }
                 };
 
                 videoStream = await navigator.mediaDevices.getUserMedia(constraints);
                 const video = document.getElementById('video');
                 const canvas = document.getElementById('canvas');
-                const ctx = canvas.getContext('2d');
 
                 video.srcObject = videoStream;
+                videoTrack = videoStream.getVideoTracks()[0];
 
                 video.onloadedmetadata = () => {
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     document.getElementById('cameraOverlay').classList.add('hidden');
                     showNotification('Camera ready for cell detection', 'success');
+                    
+                    // Update pan display
+                    updatePanDisplay();
                 };
+
+                // Set initial zoom and pan
+                updateZoom();
 
             } catch (error) {
                 console.error('Camera error:', error);
@@ -1531,7 +1764,7 @@
                     <div style="text-align: center;">
                         <div style="font-size: 48px; margin-bottom: 16px;">📷</div>
                         <div>Camera access required</div>
-                        <button class="action-btn" onclick="startCamera()" style="margin-top: 16px;">Retry</button>
+                        <button class="control-btn" onclick="startCamera()" style="margin-top: 16px;">Retry</button>
                     </div>
                 `;
             }
@@ -1549,6 +1782,106 @@
         }
 
         // ========================================
+        // ZOOM AND PAN FUNCTIONS (NEW)
+        // ========================================
+        function zoomIn() {
+            if (zoomLevel < 3.0) {
+                zoomLevel += 0.1;
+                updateZoom();
+                updatePanDisplay();
+            }
+        }
+
+        function zoomOut() {
+            if (zoomLevel > 1.0) {
+                zoomLevel -= 0.1;
+                updateZoom();
+                updatePanDisplay();
+            }
+        }
+
+        function panUp() {
+            panY = Math.min(panY + panStep, maxPan);
+            updateZoom();
+            updatePanDisplay();
+        }
+
+        function panDown() {
+            panY = Math.max(panY - panStep, -maxPan);
+            updateZoom();
+            updatePanDisplay();
+        }
+
+        function panLeft() {
+            panX = Math.max(panX - panStep, -maxPan);
+            updateZoom();
+            updatePanDisplay();
+        }
+
+        function panRight() {
+            panX = Math.min(panX + panStep, maxPan);
+            updateZoom();
+            updatePanDisplay();
+        }
+
+        function resetZoomAndPan() {
+            zoomLevel = 1.0;
+            panX = 0;
+            panY = 0;
+            updateZoom();
+            updatePanDisplay();
+            showNotification('Zoom and pan reset', 'info');
+        }
+
+        function updateZoom() {
+            const video = document.getElementById('video');
+            const zoomLevelDisplay = document.getElementById('zoomLevel');
+            
+            if (video && video.style) {
+                // Apply both zoom and pan transformations
+                video.style.transform = `scale(${zoomLevel}) translate(${panX}px, ${panY}px)`;
+                video.style.transition = 'transform 0.3s ease';
+                video.style.transformOrigin = 'center center';
+                
+                // Update zoom level display
+                zoomLevelDisplay.textContent = `Zoom: ${zoomLevel.toFixed(1)}x`;
+            }
+        }
+
+        function updatePanDisplay() {
+            const panPositionDisplay = document.getElementById('panPosition');
+            panPositionDisplay.textContent = `X: ${panX}, Y: ${panY}`;
+        }
+
+        // ========================================
+        // FLASH CONTROL
+        // ========================================
+        function toggleFlash() {
+            if (!videoTrack) return;
+
+            isFlashOn = !isFlashOn;
+            const flashBtn = document.getElementById('flashBtn');
+            
+            try {
+                if (videoTrack.getCapabilities().torch) {
+                    videoTrack.applyConstraints({
+                        advanced: [{ torch: isFlashOn }]
+                    }).then(() => {
+                        flashBtn.innerHTML = isFlashOn ? '🔦 Flash On' : '⚡ Flash Off';
+                        showNotification(isFlashOn ? 'Flash turned on' : 'Flash turned off', 'info');
+                    }).catch(err => {
+                        console.error('Flash error:', err);
+                        showNotification('Flash not supported on this device', 'warning');
+                    });
+                } else {
+                    showNotification('Flash not supported on this device', 'warning');
+                }
+            } catch (error) {
+                console.error('Flash toggle error:', error);
+            }
+        }
+
+        // ========================================
         // ACCURATE CELL DETECTION USING OPENCV
         // ========================================
         function startLiveDetection() {
@@ -1561,9 +1894,11 @@
             const btn = document.getElementById('startDetectBtn');
             btn.innerHTML = '⏸️ Stop Detection';
             btn.onclick = stopLiveDetection;
+            btn.className = 'control-btn danger';
 
-            document.querySelector('.detection-overlay').textContent = 'DETECTION: ON';
-            document.querySelector('.detection-overlay').style.color = '#4CAF50';
+            const detectionStatus = document.getElementById('detectionStatus');
+            detectionStatus.textContent = 'DETECTION: ON';
+            detectionStatus.classList.add('active');
 
             // Start FPS counter
             let frameCount = 0;
@@ -1593,7 +1928,9 @@
                     const detectionResults = await detectCellsWithOpenCV(imageData);
 
                     // Draw results
-                    drawDetectionResults(detectionResults, canvas);
+                    if (settings.showMarkers) {
+                        drawDetectionResults(detectionResults, canvas);
+                    }
 
                     // Update display
                     updateDetectionDisplay(detectionResults, startTime);
@@ -1604,7 +1941,6 @@
                     if (currentTime - lastTime >= 1000) {
                         const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
                         document.querySelector('.fps-counter').textContent = `FPS: ${fps}`;
-                        document.getElementById('cameraFPS').textContent = fps;
                         frameCount = 0;
                         lastTime = currentTime;
                     }
@@ -1620,11 +1956,13 @@
         function stopLiveDetection() {
             isLiveDetection = false;
             const btn = document.getElementById('startDetectBtn');
-            btn.innerHTML = '🔴 Start Detection';
+            btn.innerHTML = '▶ Start Detection';
             btn.onclick = startLiveDetection;
+            btn.className = 'control-btn primary';
 
-            document.querySelector('.detection-overlay').textContent = 'DETECTION: OFF';
-            document.querySelector('.detection-overlay').style.color = '#ff3d71';
+            const detectionStatus = document.getElementById('detectionStatus');
+            detectionStatus.textContent = 'DETECTION: OFF';
+            detectionStatus.classList.remove('active');
 
             if (liveDetectionInterval) {
                 clearInterval(liveDetectionInterval);
@@ -1635,6 +1973,12 @@
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Reset stats
+            document.getElementById('cameraTotal').textContent = '0';
+            document.getElementById('cameraRBC').textContent = '0';
+            document.getElementById('cameraWBC').textContent = '0';
+            document.getElementById('liveTotal').textContent = '0';
 
             showNotification('Live detection stopped', 'info');
         }
@@ -1787,9 +2131,9 @@
 
         function drawDetectionResults(results, canvas) {
             const ctx = canvas.getContext('2d');
+            const video = document.getElementById('video');
 
             // Clear previous drawings (keep video frame)
-            const video = document.getElementById('video');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
             // Draw cell markers
@@ -1818,10 +2162,6 @@
 
             // Update main dashboard
             document.getElementById('liveTotal').textContent = results.total;
-            document.getElementById('liveRBC').textContent = results.rbc;
-            document.getElementById('liveWBC').textContent = results.wbc;
-            document.getElementById('aiTotal').textContent = results.total;
-            document.getElementById('aiSpeed').textContent = `${processingTime}ms`;
 
             // Save reading if auto-save enabled
             if (settings.autoSave && results.total > 0) {
@@ -1837,7 +2177,7 @@
 
             const canvas = document.getElementById('canvas');
             const link = document.createElement('a');
-            link.download = `blood-cell-analysis-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.png`;
+            link.download = `microx-snapshot-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
 
@@ -1845,7 +2185,7 @@
         }
 
         // ========================================
-        // GALLERY FUNCTIONS WITH OPENCV
+        // GALLERY FUNCTIONS WITH FULLSCREEN VIEW
         // ========================================
         function handleImageUpload(event) {
             const file = event.target.files[0];
@@ -1911,7 +2251,8 @@
                 saveReading(detectionResults, 'image');
 
                 // Update dashboard
-                updateDashboardStats(detectionResults, processingTime);
+                document.getElementById('liveTotal').textContent = detectionResults.total;
+                document.getElementById('aiTotal').textContent = detectionResults.total;
 
                 showNotification(`Analysis complete: ${detectionResults.total} cells detected`, 'success');
 
@@ -1953,16 +2294,8 @@
             });
         }
 
-        function updateDashboardStats(results, processingTime) {
-            document.getElementById('liveTotal').textContent = results.total;
-            document.getElementById('liveRBC').textContent = results.rbc;
-            document.getElementById('liveWBC').textContent = results.wbc;
-            document.getElementById('aiTotal').textContent = results.total;
-            document.getElementById('aiSpeed').textContent = `${processingTime}ms`;
-        }
-
         // ========================================
-        // FILTER MODE WITH IMAGE SELECTION (from index1.html)
+        // FILTER MODE WITH FULLSCREEN VIEW
         // ========================================
         function handleFilterUpload(event) {
             const file = event.target.files[0];
@@ -1978,8 +2311,6 @@
                     const preview = document.getElementById('filterPreview');
                     preview.src = e.target.result;
                     preview.style.display = 'block';
-                    preview.style.width = '100%';
-                    preview.style.height = 'auto';
 
                     // Hide placeholder
                     document.getElementById('filterPlaceholder').classList.add('hidden');
@@ -2035,6 +2366,31 @@
             } catch (error) {
                 console.error('Filter application error:', error);
                 showNotification('Failed to apply filter', 'error');
+            }
+        }
+
+        // NEW FUNCTION: Save filtered image
+        function saveFilteredImage() {
+            if (!filterImage) {
+                showNotification('Please select and apply filter to an image first', 'warning');
+                return;
+            }
+
+            const canvas = document.getElementById('filterCanvas');
+            if (canvas.style.display === 'none') {
+                // If no filter applied, save original image
+                const link = document.createElement('a');
+                link.download = `microx-original-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.png`;
+                link.href = filterImage.src;
+                link.click();
+                showNotification('Original image saved', 'success');
+            } else {
+                // Save filtered image
+                const link = document.createElement('a');
+                link.download = `microx-${currentFilter}-filtered-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showNotification(`Filtered image (${currentFilter}) saved`, 'success');
             }
         }
 
@@ -2141,8 +2497,7 @@
                 rbcCount: results.rbc,
                 wbcCount: results.wbc,
                 source: source,
-                filter: currentFilter,
-                processingTime: results.processingTime || 0
+                filter: currentFilter
             };
 
             analysisHistory.push(reading);
@@ -2156,64 +2511,6 @@
             saveData();
         }
 
-        function updateAnalysisDisplay() {
-            const readings = analysisHistory;
-
-            if (readings.length === 0) {
-                document.getElementById('totalReadings').textContent = '0';
-                document.getElementById('avgRBC').textContent = '0';
-                document.getElementById('avgWBC').textContent = '0';
-                document.getElementById('successRate').textContent = '0%';
-                updateHistoryList();
-                return;
-            }
-
-            // Calculate statistics for last 5 readings
-            const lastFive = readings.slice(-5);
-            const totalReadings = readings.length;
-            const avgRBC = Math.round(lastFive.reduce((sum, r) => sum + r.rbcCount, 0) / lastFive.length);
-            const avgWBC = Math.round(lastFive.reduce((sum, r) => sum + r.wbcCount, 0) / lastFive.length);
-            const successRate = Math.round((lastFive.filter(r => r.totalCells > 0).length / lastFive.length) * 100);
-
-            // Update display
-            document.getElementById('totalReadings').textContent = totalReadings;
-            document.getElementById('avgRBC').textContent = avgRBC;
-            document.getElementById('avgWBC').textContent = avgWBC;
-            document.getElementById('successRate').textContent = successRate + '%';
-
-            // Update history list
-            updateHistoryList();
-        }
-
-        function updateHistoryList() {
-            const container = document.getElementById('historyList');
-            container.innerHTML = '';
-
-            const lastFive = analysisHistory.slice(-5).reverse();
-
-            if (lastFive.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">No analysis history yet</div>';
-                return;
-            }
-
-            lastFive.forEach((reading, index) => {
-                const time = new Date(reading.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const item = document.createElement('div');
-                item.className = 'history-item';
-                item.innerHTML = `
-                    <div>
-                        <div style="font-weight: 600; margin-bottom: 4px;">${reading.totalCells} cells detected</div>
-                        <div class="history-time">${reading.source === 'image' ? '🖼️ Image' : '📷 Live'} • ${time}</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="color: #4CAF50; font-weight: 600;">RBC: ${reading.rbcCount}</div>
-                        <div style="color: #2196F3;">WBC: ${reading.wbcCount}</div>
-                    </div>
-                `;
-                container.appendChild(item);
-            });
-        }
-
         // ========================================
         // EXPORT FUNCTIONS
         // ========================================
@@ -2223,16 +2520,16 @@
                 return;
             }
 
-            let csv = 'Timestamp,Total Cells,RBC Count,WBC Count,Source,Filter,Processing Time(ms)\n';
+            let csv = 'Timestamp,Total Cells,RBC Count,WBC Count,Source,Filter\n';
             analysisHistory.forEach(r => {
-                csv += `${r.timestamp},${r.totalCells},${r.rbcCount},${r.wbcCount},${r.source},${r.filter},${r.processingTime}\n`;
+                csv += `${r.timestamp},${r.totalCells},${r.rbcCount},${r.wbcCount},${r.source},${r.filter}\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `blood-analysis-${new Date().toISOString().slice(0, 10)}.csv`;
+            a.download = `microx-data-${new Date().toISOString().slice(0, 10)}.csv`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -2249,7 +2546,7 @@
 
             const data = {
                 metadata: {
-                    app: "HemaScan Pro",
+                    app: "MicroX",
                     version: "1.0",
                     exportDate: new Date().toISOString()
                 },
@@ -2262,7 +2559,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `blood-analysis-${new Date().toISOString().slice(0, 10)}.json`;
+            a.download = `microx-data-${new Date().toISOString().slice(0, 10)}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -2283,7 +2580,7 @@
             }
 
             const link = document.createElement('a');
-            link.download = `blood-cell-analysis-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.png`;
+            link.download = `microx-analysis-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.png`;
             link.href = canvas.toDataURL('image/png');
             document.body.appendChild(link);
             link.click();
@@ -2408,7 +2705,7 @@
                 setTimeout(() => {
                     document.body.innerHTML = `
                         <div style="text-align: center; color: white; padding: 40px;">
-                            <h1 style="margin-bottom: 20px;">HemaScan Pro</h1>
+                            <h1 style="margin-bottom: 20px;">MicroX</h1>
                             <p>Application closed successfully.</p>
                             <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">You can close this tab.</p>
                         </div>
@@ -2481,7 +2778,7 @@
                     analysisHistory: analysisHistory,
                     clinicalMode: clinicalMode
                 };
-                localStorage.setItem('hemascan_data', JSON.stringify(data));
+                localStorage.setItem('microx_data', JSON.stringify(data));
             } catch (e) {
                 console.error('Failed to save data:', e);
             }
@@ -2489,7 +2786,7 @@
 
         function loadSavedData() {
             try {
-                const saved = localStorage.getItem('hemascan_data');
+                const saved = localStorage.getItem('microx_data');
                 if (saved) {
                     const data = JSON.parse(saved);
                     settings = data.settings || settings;
@@ -2504,28 +2801,6 @@
                 console.error('Failed to load data:', e);
             }
         }
-
-        function clearHistory() {
-            if (analysisHistory.length === 0) {
-                showNotification('No history to clear', 'warning');
-                return;
-            }
-
-            if (confirm('Clear all analysis history? This cannot be undone.')) {
-                analysisHistory = [];
-                saveData();
-                updateAnalysisDisplay();
-                showNotification('History cleared', 'success');
-            }
-        }
-
-        function refreshHistory() {
-            updateAnalysisDisplay();
-            showNotification('History refreshed', 'info');
-        }
-
-        // Initialize the app
-        // All initialization happens in DOMContentLoaded event
     </script>
 </body>
 
