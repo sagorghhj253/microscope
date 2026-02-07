@@ -495,7 +495,7 @@
             color: #ccc;
         }
 
-        /* Filter Options */
+        /* Filter Options - Enhanced from index1.html */
         .filter-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -533,6 +533,86 @@
         body.clinical-mode .filter-btn.active {
             background: #4CAF50;
             border-color: #4CAF50;
+        }
+
+        /* Filter Preview Section */
+        .filter-preview-container {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            margin-bottom: 16px;
+            min-height: 200px;
+        }
+
+        #filterPreview {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .filter-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            color: #666;
+            background: #f0f0f0;
+        }
+
+        body.clinical-mode .filter-overlay {
+            background: #0f3460;
+            color: #ccc;
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .filter-control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        body.clinical-mode .control-label {
+            color: #ccc;
+        }
+
+        .control-slider {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            outline: none;
+        }
+
+        body.clinical-mode .control-slider {
+            background: #1a1a2e;
+        }
+
+        .control-value {
+            font-size: 11px;
+            color: #667eea;
+            font-weight: 600;
+            text-align: right;
         }
 
         /* Analysis History */
@@ -640,6 +720,33 @@
             display: none !important;
         }
 
+        /* FPS Counter */
+        .fps-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: #4CAF50;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 100;
+        }
+
+        /* Detection Overlay */
+        .detection-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: #ff3d71;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 100;
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
             .grid {
@@ -665,6 +772,11 @@
             .action-btn {
                 padding: 12px 4px;
                 font-size: 11px;
+            }
+            
+            .filter-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
             }
         }
 
@@ -701,33 +813,6 @@
         body.clinical-mode .opencv-loading {
             background: #16213e;
             color: white;
-        }
-
-        /* FPS Counter */
-        .fps-counter {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.7);
-            color: #4CAF50;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: monospace;
-            z-index: 100;
-        }
-
-        /* Detection Overlay */
-        .detection-overlay {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.7);
-            color: #ff3d71;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            z-index: 100;
         }
     </style>
 </head>
@@ -929,15 +1014,26 @@
         </div>
     </div>
 
-    <!-- Filters Modal -->
+    <!-- Filters Modal - UPDATED from index1.html -->
     <div class="modal" id="filtersModal">
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close-btn" onclick="closeFiltersModal()">×</button>
                 <div class="modal-title">Image Filters</div>
-                <div class="modal-subtitle">Enhance detection accuracy</div>
+                <div class="modal-subtitle">Preview and apply filters</div>
             </div>
             <div class="modal-body">
+                <div class="filter-preview-container">
+                    <img id="filterPreview" class="hidden">
+                    <canvas id="filterCanvas"></canvas>
+                    <div class="filter-overlay" id="filterPlaceholder">
+                        <span style="font-size: 48px;">🖼️</span>
+                        <div>Select image to preview filters</div>
+                    </div>
+                </div>
+                
+                <input type="file" id="filterUpload" accept="image/*" class="hidden">
+                
                 <div class="filter-grid">
                     <button class="filter-btn active" data-filter="none">None</button>
                     <button class="filter-btn" data-filter="gaussian">Gaussian</button>
@@ -950,21 +1046,25 @@
                     <button class="filter-btn" data-filter="adaptive">Adaptive</button>
                 </div>
                 
-                <div style="margin: 20px 0;">
-                    <div style="font-size: 14px; margin-bottom: 8px;">Active Filter: <span id="activeFilter" style="color: #667eea; font-weight: 600;">None</span></div>
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span style="font-size: 12px;">Low</span>
-                        <input type="range" id="filterStrength" min="0" max="100" value="50" style="flex: 1;">
-                        <span style="font-size: 12px;">High</span>
+                <div class="filter-controls" id="filterControls">
+                    <div class="filter-control-group">
+                        <div class="control-label">Kernel Size</div>
+                        <input type="range" class="control-slider" id="kernelSlider" min="1" max="10" value="3">
+                        <div class="control-value" id="kernelValue">3</div>
+                    </div>
+                    <div class="filter-control-group">
+                        <div class="control-label">Sigma</div>
+                        <input type="range" class="control-slider" id="sigmaSlider" min="0.1" max="5" step="0.1" value="1.0">
+                        <div class="control-value" id="sigmaValue">1.0</div>
                     </div>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
-                    <button class="action-btn primary" onclick="applyFilterToCamera()">
-                        Apply to Camera
+                    <button class="action-btn primary" onclick="document.getElementById('filterUpload').click()">
+                        📁 Select Image
                     </button>
-                    <button class="action-btn" onclick="applyFilterToImage()">
-                        Apply to Image
+                    <button class="action-btn success" onclick="applyFilterToPreview()">
+                        🔧 Apply Filter
                     </button>
                 </div>
             </div>
@@ -1033,6 +1133,7 @@
         let isLiveDetection = false;
         let liveDetectionInterval = null;
         let currentImage = null;
+        let filterImage = null;
         let analysisHistory = [];
         let currentFilter = 'none';
         let clinicalMode = false;
@@ -1045,6 +1146,14 @@
             showMarkers: true,
             autoSave: true,
             analysisInterval: 500
+        };
+
+        // Filter parameters (from index1.html)
+        let filterParams = {
+            kernelSize: 3,
+            sigma: 1.0,
+            threshold1: 100,
+            threshold2: 200
         };
 
         // ========================================
@@ -1082,9 +1191,6 @@
             // Initialize camera preview
             initCameraPreview();
             
-            // Initialize filter buttons
-            initFilterButtons();
-            
             // Update UI with loaded settings
             updateSettingsUI();
         });
@@ -1093,15 +1199,36 @@
             // Image upload handling
             document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
             
-            // Filter button clicks
+            // Filter upload handling (from index1.html)
+            document.getElementById('filterUpload').addEventListener('change', handleFilterUpload);
+            
+            // Filter button clicks (from index1.html)
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     currentFilter = this.dataset.filter;
-                    document.getElementById('activeFilter').textContent = currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1);
-                    showNotification(`${currentFilter} filter selected`, 'info');
+                    if (filterImage) {
+                        applyFilterToPreview();
+                    }
                 });
+            });
+            
+            // Filter controls (from index1.html)
+            document.getElementById('kernelSlider').addEventListener('input', function() {
+                filterParams.kernelSize = parseInt(this.value);
+                document.getElementById('kernelValue').textContent = this.value;
+                if (filterImage && currentFilter !== 'none') {
+                    applyFilterToPreview();
+                }
+            });
+            
+            document.getElementById('sigmaSlider').addEventListener('input', function() {
+                filterParams.sigma = parseFloat(this.value);
+                document.getElementById('sigmaValue').textContent = this.value;
+                if (filterImage && currentFilter !== 'none') {
+                    applyFilterToPreview();
+                }
             });
             
             // Settings sliders
@@ -1144,10 +1271,6 @@
                 console.error('Camera error:', err);
                 overlay.innerHTML = '<div>Camera access denied. Please enable camera permissions.</div>';
             }
-        }
-
-        function initFilterButtons() {
-            document.querySelector('.filter-btn[data-filter="none"]').classList.add('active');
         }
 
         // ========================================
@@ -1677,6 +1800,176 @@
         }
 
         // ========================================
+        // FILTER MODE WITH IMAGE SELECTION (from index1.html)
+        // ========================================
+        function handleFilterUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    filterImage = img;
+                    
+                    // Display preview
+                    const preview = document.getElementById('filterPreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    preview.style.width = '100%';
+                    preview.style.height = 'auto';
+                    
+                    // Hide placeholder
+                    document.getElementById('filterPlaceholder').classList.add('hidden');
+                    
+                    // Apply default filter preview
+                    applyFilterToPreview();
+                    
+                    showNotification('Image loaded for filter preview', 'info');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function applyFilterToPreview() {
+            if (!filterImage) {
+                showNotification('Please select an image first', 'warning');
+                return;
+            }
+
+            const canvas = document.getElementById('filterCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = filterImage.width;
+            canvas.height = filterImage.height;
+            
+            try {
+                // Draw original image
+                ctx.drawImage(filterImage, 0, 0);
+                
+                if (currentFilter === 'none') {
+                    // Show original
+                    document.getElementById('filterPreview').style.display = 'block';
+                    canvas.style.display = 'none';
+                    return;
+                }
+                
+                // Get image data
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                
+                // Apply filter using OpenCV
+                const filtered = await applyOpenCVFilter(imageData, currentFilter);
+                
+                // Display filtered result
+                cv.imshow(canvas, filtered);
+                canvas.style.display = 'block';
+                document.getElementById('filterPreview').style.display = 'none';
+                
+                // Clean up
+                filtered.delete();
+                
+                showNotification(`${currentFilter} filter applied`, 'success');
+                
+            } catch (error) {
+                console.error('Filter application error:', error);
+                showNotification('Failed to apply filter', 'error');
+            }
+        }
+
+        async function applyOpenCVFilter(imageData, filterType) {
+            if (!isOpenCvReady) return null;
+            
+            const src = cv.matFromImageData(imageData);
+            const result = new cv.Mat();
+            
+            try {
+                switch(filterType) {
+                    case 'gaussian':
+                        cv.GaussianBlur(
+                            src, 
+                            result, 
+                            new cv.Size(filterParams.kernelSize * 2 + 1, filterParams.kernelSize * 2 + 1),
+                            filterParams.sigma
+                        );
+                        break;
+                        
+                    case 'median':
+                        cv.medianBlur(
+                            src,
+                            result,
+                            filterParams.kernelSize * 2 + 1
+                        );
+                        break;
+                        
+                    case 'bilateral':
+                        cv.cvtColor(src, result, cv.COLOR_RGBA2RGB);
+                        cv.bilateralFilter(
+                            result,
+                            result,
+                            9,
+                            filterParams.sigma * 25,
+                            filterParams.sigma * 5
+                        );
+                        cv.cvtColor(result, result, cv.COLOR_RGB2RGBA);
+                        break;
+                        
+                    case 'contrast':
+                        cv.convertScaleAbs(src, result, 1.5, 0);
+                        break;
+                        
+                    case 'edge':
+                        const gray = new cv.Mat();
+                        cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+                        cv.Canny(gray, result, filterParams.threshold1, filterParams.threshold2);
+                        cv.cvtColor(result, result, cv.COLOR_GRAY2RGBA);
+                        gray.delete();
+                        break;
+                        
+                    case 'sharpen':
+                        const kernel = cv.matFromArray(3, 3, cv.CV_32F, [
+                            0, -1, 0,
+                            -1, 5, -1,
+                            0, -1, 0
+                        ]);
+                        cv.filter2D(src, result, -1, kernel);
+                        kernel.delete();
+                        break;
+                        
+                    case 'threshold':
+                        cv.cvtColor(src, result, cv.COLOR_RGBA2GRAY);
+                        cv.threshold(result, result, 127, 255, cv.THRESH_BINARY);
+                        cv.cvtColor(result, result, cv.COLOR_GRAY2RGBA);
+                        break;
+                        
+                    case 'adaptive':
+                        cv.cvtColor(src, result, cv.COLOR_RGBA2GRAY);
+                        cv.adaptiveThreshold(
+                            result,
+                            result,
+                            255,
+                            cv.ADAPTIVE_THRESH_GAUSSIAN_C,
+                            cv.THRESH_BINARY,
+                            11,
+                            2
+                        );
+                        cv.cvtColor(result, result, cv.COLOR_GRAY2RGBA);
+                        break;
+                        
+                    default:
+                        src.copyTo(result);
+                }
+                
+                src.delete();
+                return result;
+                
+            } catch (error) {
+                src.delete();
+                result.delete();
+                throw error;
+            }
+        }
+
+        // ========================================
         // DATA MANAGEMENT
         // ========================================
         function saveReading(results, source) {
@@ -1757,32 +2050,6 @@
                 `;
                 container.appendChild(item);
             });
-        }
-
-        // ========================================
-        // FILTER FUNCTIONS
-        // ========================================
-        function applyFilterToCamera() {
-            if (!isLiveDetection) {
-                showNotification('Start camera detection first', 'warning');
-                return;
-            }
-            
-            showNotification(`${currentFilter} filter applied to camera`, 'success');
-            // In a real implementation, this would update the processing pipeline
-        }
-
-        function applyFilterToImage() {
-            if (!currentImage) {
-                showNotification('No image selected', 'warning');
-                return;
-            }
-            
-            showNotification(`${currentFilter} filter applied to image`, 'success');
-            // Re-analyze image with filter
-            if (currentImage) {
-                analyzeImage();
-            }
         }
 
         // ========================================
