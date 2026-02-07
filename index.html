@@ -890,8 +890,8 @@
                 <div class="icon-label">Help</div>
             </div>
             <div class="icon-box" onclick="toggleClinicalMode()">
-                <span style="font-size: 24px;">🩺</span>
-                <div class="icon-label">Clinical</div>
+                <span style="font-size: 24px;">☀️</span>
+                <div class="icon-label">light</div>
             </div>
         </div>
 
@@ -2186,12 +2186,12 @@
             
             if (clinicalMode) {
                 body.classList.add('clinical-mode');
-                btn.innerHTML = '<span style="font-size: 24px;">🔬</span><div class="icon-label">Standard</div>';
-                showNotification('Clinical mode enabled', 'success');
+                btn.innerHTML = '<span style="font-size: 24px;">🧿</span><div class="icon-label">Dark</div>';
+                showNotification('Dark mode enabled', 'success');
             } else {
                 body.classList.remove('clinical-mode');
-                btn.innerHTML = '<span style="font-size: 24px;">🩺</span><div class="icon-label">Clinical</div>';
-                showNotification('Standard mode enabled', 'info');
+                btn.innerHTML = '<span style="font-size: 24px;">☀️</span><div class="icon-label">Light</div>';
+                showNotification('Light mode enabled', 'info');
             }
             
             saveData();
