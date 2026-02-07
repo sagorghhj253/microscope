@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -34,7 +35,7 @@
             max-width: 500px;
             background: white;
             border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             transition: all 0.3s ease;
         }
@@ -82,7 +83,7 @@
             background: #f8f9fa;
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             border: 2px solid transparent;
         }
@@ -97,7 +98,7 @@
         }
 
         .gradient-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #616358 0%, #596358 100%);
             color: white;
             grid-column: span 1;
             height: 180px;
@@ -111,7 +112,7 @@
         }
 
         .analysis-card {
-            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+            background: linear-gradient(135deg, #616358 0%, #596358 100%);
             color: white;
             height: 180px;
             display: flex;
@@ -158,7 +159,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
             cursor: pointer;
             position: relative;
@@ -210,7 +211,7 @@
             font-size: 12px;
             font-weight: 600;
             color: #333;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
@@ -319,7 +320,7 @@
             position: absolute;
             top: 16px;
             right: 16px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
             width: 32px;
@@ -348,7 +349,8 @@
             margin-bottom: 16px;
         }
 
-        #video, #canvas {
+        #video,
+        #canvas {
             width: 100%;
             height: 300px;
             object-fit: cover;
@@ -368,7 +370,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -380,14 +382,16 @@
         .spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid rgba(255,255,255,0.3);
+            border: 4px solid rgba(255, 255, 255, 0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Cell Detection Markers */
@@ -409,10 +413,13 @@
         }
 
         @keyframes pulseMarker {
-            0%, 100% { 
+
+            0%,
+            100% {
                 box-shadow: 0 0 0 0 rgba(255, 61, 113, 0.4);
             }
-            50% { 
+
+            50% {
                 box-shadow: 0 0 0 10px rgba(255, 61, 113, 0);
             }
         }
@@ -725,7 +732,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             color: #4CAF50;
             padding: 4px 8px;
             border-radius: 4px;
@@ -739,12 +746,42 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             color: #ff3d71;
             padding: 4px 8px;
             border-radius: 4px;
             font-size: 12px;
             z-index: 100;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #ddd;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #4CAF50;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(20px);
         }
 
         /* Responsive */
@@ -753,27 +790,27 @@
                 gap: 12px;
                 padding: 16px;
             }
-            
+
             .icon-grid {
                 gap: 8px;
                 padding: 0 16px;
             }
-            
+
             .icon-box {
                 height: 80px;
             }
-            
+
             .action-buttons {
                 grid-template-columns: repeat(4, 1fr);
                 gap: 8px;
                 padding: 16px;
             }
-            
+
             .action-btn {
                 padding: 12px 4px;
                 font-size: 11px;
             }
-            
+
             .filter-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 6px;
@@ -791,7 +828,7 @@
             border-radius: 20px;
             text-align: center;
             z-index: 2000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
 
         .progress-bar {
@@ -816,12 +853,13 @@
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard">
         <!-- Header -->
         <div class="header">
             <h1 class="app-title">MicroX</h1>
-            <p class="app-subtitle">Microscope Image Analysis System</p>
+            <p class="app-subtitle">Microscopic Image Analysis System</p>
         </div>
 
         <!-- Main Stats Grid -->
@@ -832,7 +870,7 @@
                     <div class="stat-item">
                         <div class="stat-value" id="liveTotal">0</div>
                         <div class="stat-label">Cells</div>
-                    </div>
+                    </div> 
                 </div>
             </div>
 
@@ -862,7 +900,7 @@
                 <div class="icon-label">Analysis</div>
             </div>
             <div class="icon-box" onclick="openFiltersModal()">
-                <span style="font-size: 24px;">🔧</span>
+                <span style="font-size: 24px;">🔍︎</span>
                 <div class="icon-label">Filters</div>
             </div>
             <div class="icon-box" onclick="openExportModal()">
@@ -874,7 +912,7 @@
                 <div class="icon-label">Settings</div>
             </div>
             <div class="icon-box" onclick="openHelpModal()">
-                <span style="font-size: 24px;">❓</span>
+                <span style="font-size: 24px;">🗨️</span>
                 <div class="icon-label">Help</div>
             </div>
             <div class="icon-box" onclick="toggleClinicalMode()">
@@ -886,16 +924,16 @@
         <!-- Action Buttons -->
         <div class="action-buttons">
             <button class="action-btn success" onclick="goHome()">
-                🏠 Home
+                Home
             </button>
             <button class="action-btn primary" onclick="startAnalysis()">
-                ▶️ Start
+                Start
             </button>
             <button class="action-btn danger" onclick="stopAnalysis()">
-                ⏸️ Stop
+                Stop
             </button>
             <button class="action-btn warning" onclick="exitApp()">
-                🚪 Exit
+                Exit
             </button>
         </div>
     </div>
@@ -905,8 +943,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close-btn" onclick="closeCameraModal()">×</button>
-                <div class="modal-title">Live Cell Detection</div>
-                <div class="modal-subtitle">AI-powered real-time analysis</div>
+                <div class="modal-title">Live Detection</div>
+                <div class="modal-subtitle">Real-time analysis</div>
             </div>
             <div class="modal-body">
                 <div class="video-container">
@@ -919,32 +957,32 @@
                         <div>Initializing camera...</div>
                     </div>
                 </div>
-                
+
                 <div class="results-grid">
                     <div class="result-card">
                         <div class="result-label">Total Cells</div>
                         <div class="result-value" id="cameraTotal">0</div>
                     </div>
-                    <div class="result-card">
+                 <!--   <div class="result-card">
                         <div class="result-label">RBC Count</div>
                         <div class="result-value" id="cameraRBC">0</div>
                     </div>
-                    <div class="result-card">
+                        <div class="result-card">
                         <div class="result-label">WBC Count</div>
                         <div class="result-value" id="cameraWBC">0</div>
-                    </div>
+                  </div> -->
                     <div class="result-card">
                         <div class="result-label">FPS</div>
                         <div class="result-value" id="cameraFPS">0</div>
                     </div>
                 </div>
-                
+
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
                     <button class="action-btn primary" onclick="startLiveDetection()" id="startDetectBtn">
-                        🔴 Start Detection
+                        Start Detection
                     </button>
                     <button class="action-btn" onclick="captureSnapshot()">
-                        📸 Capture
+                        Capture
                     </button>
                 </div>
             </div>
@@ -968,9 +1006,9 @@
                         <div>Select an image to analyze</div>
                     </div>
                 </div>
-                
+
                 <input type="file" id="imageUpload" accept="image/*" class="hidden">
-                
+
                 <div class="results-grid">
                     <div class="result-card">
                         <div class="result-label">Image Size</div>
@@ -989,7 +1027,7 @@
                         <div class="result-value" id="imageConfidence">-</div>
                     </div>
                 </div>
-                
+
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
                     <button class="action-btn primary" onclick="document.getElementById('imageUpload').click()">
                         📁 Upload Image
@@ -1019,9 +1057,9 @@
                         <div>Select image to preview filters</div>
                     </div>
                 </div>
-                
+
                 <input type="file" id="filterUpload" accept="image/*" class="hidden">
-                
+
                 <div class="filter-grid">
                     <button class="filter-btn active" data-filter="none">None</button>
                     <button class="filter-btn" data-filter="gaussian">Gaussian</button>
@@ -1033,7 +1071,7 @@
                     <button class="filter-btn" data-filter="threshold">Threshold</button>
                     <button class="filter-btn" data-filter="adaptive">Adaptive</button>
                 </div>
-                
+
                 <div class="filter-controls" id="filterControls">
                     <div class="filter-control-group">
                         <div class="control-label">Kernel Size</div>
@@ -1042,17 +1080,18 @@
                     </div>
                     <div class="filter-control-group">
                         <div class="control-label">Sigma</div>
-                        <input type="range" class="control-slider" id="sigmaSlider" min="0.1" max="5" step="0.1" value="1.0">
+                        <input type="range" class="control-slider" id="sigmaSlider" min="0.1" max="5" step="0.1"
+                            value="1.0">
                         <div class="control-value" id="sigmaValue">1.0</div>
                     </div>
                 </div>
-                
+
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
                     <button class="action-btn primary" onclick="document.getElementById('filterUpload').click()">
-                        📁 Select Image
+                         Select Image
                     </button>
                     <button class="action-btn success" onclick="applyFilterToPreview()">
-                        🔧 Apply Filter
+                         Apply Filter
                     </button>
                 </div>
             </div>
@@ -1090,7 +1129,7 @@
                         <div style="font-size: 11px; opacity: 0.7;">Full report</div>
                     </div>
                 </div>
-                
+
                 <div style="margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: 12px;">
                     <div style="font-size: 14px; margin-bottom: 8px;">Export Status</div>
                     <div id="exportStatus" style="font-size: 12px; color: #4CAF50;">Ready to export</div>
@@ -1098,7 +1137,142 @@
             </div>
         </div>
     </div>
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeSettingsModal()">×</button>
+                <div class="modal-title">Settings</div>
+                <div class="modal-subtitle">Configure application preferences</div>
+            </div>
+            <div class="modal-body">
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Detection Sensitivity</div>
+                            <div style="font-size: 12px; color: #666;">Adjust cell detection accuracy</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div id="sensitivityValue">75%</div>
+                            <input type="range" id="sensitivitySlider" min="10" max="100" value="75"
+                                style="width: 100px;">
+                        </div>
+                    </div>
 
+                    <div class="settings-item">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Analysis Interval</div>
+                            <div style="font-size: 12px; color: #666;">Time between frame analysis</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div id="intervalValue">500ms</div>
+                            <input type="range" id="intervalSlider" min="100" max="2000" step="100" value="500"
+                                style="width: 100px;">
+                        </div>
+                    </div>
+
+                    <div class="settings-item">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Show Cell Markers</div>
+                            <div style="font-size: 12px; color: #666;">Display detected cell boundaries</div>
+                        </div>
+                        <div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="showMarkers" checked style="display: none;">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-item">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Auto-save Readings</div>
+                            <div style="font-size: 12px; color: #666;">Automatically save analysis results</div>
+                        </div>
+                        <div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="autoSave" checked style="display: none;">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
+                    <button class="action-btn danger" onclick="resetSettings()">
+                        🔄 Reset
+                    </button>
+                    <button class="action-btn success" onclick="saveSettings()">
+                        💾 Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeHelpModal()">×</button>
+                <div class="modal-title">Help & Instructions</div>
+                <div class="modal-subtitle">Learn how to use HemaScan Pro</div>
+            </div>
+            <div class="modal-body">
+                <div class="help-content">
+                    <div class="help-section">
+                        <div class="help-title">Live Camera Analysis</div>
+                        <div style="font-size: 13px; line-height: 1.5;">
+                            • Point camera at smear slide<br>
+                            • Ensure good lighting<br>
+                            • Hold steady for accurate detection<br>
+                            • Use "Select Area" to focus on specific region
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <div class="help-title">Image Gallery Analysis</div>
+                        <div style="font-size: 13px; line-height: 1.5;">
+                            • Upload smear images<br>
+                            • Supported formats: JPG, PNG<br>
+                            • Select area for focused analysis<br>
+                            • Apply filters for better detection
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <div class="help-title">Image Filters</div>
+                        <div style="font-size: 13px; line-height: 1.5;">
+                            • Gaussian: Noise reduction<br>
+                            • Median: Salt & pepper noise removal<br>
+                            • Edge: Highlight cell boundaries<br>
+                            • Threshold: Binary conversion<br>
+                            • Adjust kernel and sigma for fine-tuning
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <div class="help-title">Understanding Results</div>
+                        <div style="font-size: 13px; line-height: 1.5;">
+                            •For example, if you see:<br>
+                            •RBC (Red Blood Cells): Normal range 4.5-5.5 million/μL<br>
+                            • WBC (White Blood Cells): Normal range 4,000-11,000/μL<br>
+                            • Total Cells: Combined count in view<br>
+                            • Confidence: Detection accuracy percentage
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: 12px;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">Need More Help?</div>
+                    <div style="font-size: 13px; color: #666;">
+                        Contact support: support@MicroX.com<br>
+                        Version: 1.0.0 | Last Updated: March 2026
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- OpenCV Loading Overlay -->
     <div id="opencvLoader" class="opencv-loading">
         <div class="spinner"></div>
@@ -1128,7 +1302,7 @@
         let isOpenCvReady = false;
         let cv = null;
         let detectionModel = null;
-        
+
         let settings = {
             sensitivity: 75,
             showMarkers: true,
@@ -1151,14 +1325,14 @@
             console.log('OpenCV.js loaded successfully');
             cv = window.cv;
             isOpenCvReady = true;
-            
+
             // Update loading progress
             const progress = document.getElementById('opencvProgress');
             const status = document.getElementById('opencvStatus');
-            
+
             progress.style.width = '100%';
             status.textContent = 'OpenCV loaded successfully!';
-            
+
             // Hide loader after a moment
             setTimeout(() => {
                 document.getElementById('opencvLoader').style.display = 'none';
@@ -1169,16 +1343,16 @@
         // ========================================
         // INITIALIZATION
         // ========================================
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize event listeners
             initEventListeners();
-            
+
             // Load saved data
             loadSavedData();
-            
+
             // Initialize camera preview
             initCameraPreview();
-            
+
             // Update UI with loaded settings
             updateSettingsUI();
         });
@@ -1186,13 +1360,13 @@
         function initEventListeners() {
             // Image upload handling
             document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
-            
+
             // Filter upload handling (from index1.html)
             document.getElementById('filterUpload').addEventListener('change', handleFilterUpload);
-            
+
             // Filter button clicks (from index1.html)
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     currentFilter = this.dataset.filter;
@@ -1201,41 +1375,41 @@
                     }
                 });
             });
-            
+
             // Filter controls (from index1.html)
-            document.getElementById('kernelSlider').addEventListener('input', function() {
+            document.getElementById('kernelSlider').addEventListener('input', function () {
                 filterParams.kernelSize = parseInt(this.value);
                 document.getElementById('kernelValue').textContent = this.value;
                 if (filterImage && currentFilter !== 'none') {
                     applyFilterToPreview();
                 }
             });
-            
-            document.getElementById('sigmaSlider').addEventListener('input', function() {
+
+            document.getElementById('sigmaSlider').addEventListener('input', function () {
                 filterParams.sigma = parseFloat(this.value);
                 document.getElementById('sigmaValue').textContent = this.value;
                 if (filterImage && currentFilter !== 'none') {
                     applyFilterToPreview();
                 }
             });
-            
+
             // Settings sliders
-            document.getElementById('sensitivitySlider').addEventListener('input', function() {
+            document.getElementById('sensitivitySlider').addEventListener('input', function () {
                 settings.sensitivity = parseInt(this.value);
                 document.getElementById('sensitivityValue').textContent = this.value + '%';
             });
-            
-            document.getElementById('intervalSlider').addEventListener('input', function() {
+
+            document.getElementById('intervalSlider').addEventListener('input', function () {
                 settings.analysisInterval = parseInt(this.value);
                 document.getElementById('intervalValue').textContent = this.value + 'ms';
                 if (isLiveDetection) {
                     restartLiveDetection();
                 }
             });
-            
+
             // Icon grid active state
             document.querySelectorAll('.icon-box').forEach(icon => {
-                icon.addEventListener('click', function() {
+                icon.addEventListener('click', function () {
                     document.querySelectorAll('.icon-box').forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
                 });
@@ -1246,10 +1420,10 @@
             // Initialize camera when modal opens
             const video = document.getElementById('video');
             const overlay = document.getElementById('cameraOverlay');
-            
+
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment' } 
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
                 });
                 video.srcObject = stream;
                 video.onloadedmetadata = () => {
@@ -1336,21 +1510,21 @@
                         frameRate: { ideal: 30 }
                     }
                 };
-                
+
                 videoStream = await navigator.mediaDevices.getUserMedia(constraints);
                 const video = document.getElementById('video');
                 const canvas = document.getElementById('canvas');
                 const ctx = canvas.getContext('2d');
-                
+
                 video.srcObject = videoStream;
-                
+
                 video.onloadedmetadata = () => {
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     document.getElementById('cameraOverlay').classList.add('hidden');
                     showNotification('Camera ready for cell detection', 'success');
                 };
-                
+
             } catch (error) {
                 console.error('Camera error:', error);
                 document.getElementById('cameraOverlay').innerHTML = `
@@ -1368,7 +1542,7 @@
                 videoStream.getTracks().forEach(track => track.stop());
                 videoStream = null;
             }
-            
+
             if (isLiveDetection) {
                 stopLiveDetection();
             }
@@ -1387,43 +1561,43 @@
             const btn = document.getElementById('startDetectBtn');
             btn.innerHTML = '⏸️ Stop Detection';
             btn.onclick = stopLiveDetection;
-            
+
             document.querySelector('.detection-overlay').textContent = 'DETECTION: ON';
             document.querySelector('.detection-overlay').style.color = '#4CAF50';
-            
+
             // Start FPS counter
             let frameCount = 0;
             let lastTime = performance.now();
-            
+
             // Start detection loop
             liveDetectionInterval = setInterval(async () => {
                 if (!isLiveDetection) return;
-                
+
                 const startTime = performance.now();
-                
+
                 try {
                     // Get video frame
                     const video = document.getElementById('video');
                     const canvas = document.getElementById('canvas');
                     const ctx = canvas.getContext('2d');
-                    
+
                     if (!video.videoWidth || !video.videoHeight) return;
-                    
+
                     // Draw video frame to canvas
                     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    
+
                     // Get image data for processing
                     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    
+
                     // Process with OpenCV for accurate detection
                     const detectionResults = await detectCellsWithOpenCV(imageData);
-                    
+
                     // Draw results
                     drawDetectionResults(detectionResults, canvas);
-                    
+
                     // Update display
                     updateDetectionDisplay(detectionResults, startTime);
-                    
+
                     // FPS calculation
                     frameCount++;
                     const currentTime = performance.now();
@@ -1434,12 +1608,12 @@
                         frameCount = 0;
                         lastTime = currentTime;
                     }
-                    
+
                 } catch (error) {
                     console.error('Detection error:', error);
                 }
             }, settings.analysisInterval);
-            
+
             showNotification('Live cell detection started', 'success');
         }
 
@@ -1448,20 +1622,20 @@
             const btn = document.getElementById('startDetectBtn');
             btn.innerHTML = '🔴 Start Detection';
             btn.onclick = startLiveDetection;
-            
+
             document.querySelector('.detection-overlay').textContent = 'DETECTION: OFF';
             document.querySelector('.detection-overlay').style.color = '#ff3d71';
-            
+
             if (liveDetectionInterval) {
                 clearInterval(liveDetectionInterval);
                 liveDetectionInterval = null;
             }
-            
+
             // Clear canvas
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             showNotification('Live detection stopped', 'info');
         }
 
@@ -1480,15 +1654,15 @@
             try {
                 // Convert ImageData to OpenCV Mat
                 const src = cv.matFromImageData(imageData);
-                
+
                 // Convert to grayscale
                 const gray = new cv.Mat();
                 cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-                
+
                 // Apply Gaussian blur for noise reduction
                 const blurred = new cv.Mat();
                 cv.GaussianBlur(gray, blurred, new cv.Size(5, 5), 0);
-                
+
                 // Apply adaptive thresholding
                 const thresh = new cv.Mat();
                 cv.adaptiveThreshold(
@@ -1500,7 +1674,7 @@
                     11,
                     2
                 );
-                
+
                 // Find contours
                 const contours = new cv.MatVector();
                 const hierarchy = new cv.Mat();
@@ -1511,35 +1685,35 @@
                     cv.RETR_EXTERNAL,
                     cv.CHAIN_APPROX_SIMPLE
                 );
-                
+
                 // Process contours
                 const cells = [];
                 let total = 0;
                 let rbc = 0;
                 let wbc = 0;
-                
+
                 const sensitivity = settings.sensitivity / 100;
                 const minArea = 20 * sensitivity;
                 const maxArea = 500 * sensitivity;
-                
+
                 for (let i = 0; i < contours.size(); i++) {
                     const contour = contours.get(i);
                     const area = cv.contourArea(contour);
-                    
+
                     if (area > minArea && area < maxArea) {
                         total++;
-                        
+
                         // Classify based on size and circularity
                         const perimeter = cv.arcLength(contour, true);
                         const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
-                        
+
                         const moments = cv.moments(contour);
                         let cx, cy;
                         if (moments.m00 !== 0) {
                             cx = moments.m10 / moments.m00;
                             cy = moments.m01 / moments.m00;
                         }
-                        
+
                         if (area < 100 && circularity > 0.7) {
                             rbc++;
                             cells.push({
@@ -1561,7 +1735,7 @@
                         }
                     }
                 }
-                
+
                 // Clean up
                 src.delete();
                 gray.delete();
@@ -1569,7 +1743,7 @@
                 thresh.delete();
                 contours.delete();
                 hierarchy.delete();
-                
+
                 return {
                     cells: cells,
                     total: total,
@@ -1577,7 +1751,7 @@
                     wbc: wbc,
                     timestamp: new Date().toISOString()
                 };
-                
+
             } catch (error) {
                 console.error('OpenCV detection error:', error);
                 return simulateCellDetection(imageData);
@@ -1590,7 +1764,7 @@
             const total = Math.floor(Math.random() * 30) + 10;
             const rbc = Math.floor(total * 0.85);
             const wbc = total - rbc;
-            
+
             for (let i = 0; i < total; i++) {
                 const isRBC = i < rbc;
                 cells.push({
@@ -1601,7 +1775,7 @@
                     confidence: 0.7 + Math.random() * 0.25
                 });
             }
-            
+
             return {
                 cells: cells,
                 total: total,
@@ -1613,11 +1787,11 @@
 
         function drawDetectionResults(results, canvas) {
             const ctx = canvas.getContext('2d');
-            
+
             // Clear previous drawings (keep video frame)
             const video = document.getElementById('video');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
+
             // Draw cell markers
             results.cells.forEach(cell => {
                 ctx.beginPath();
@@ -1625,7 +1799,7 @@
                 ctx.strokeStyle = cell.type === 'rbc' ? '#4CAF50' : '#2196F3';
                 ctx.lineWidth = 2;
                 ctx.stroke();
-                
+
                 // Center dot
                 ctx.beginPath();
                 ctx.arc(cell.x, cell.y, 2, 0, Math.PI * 2);
@@ -1636,19 +1810,19 @@
 
         function updateDetectionDisplay(results, startTime) {
             const processingTime = Math.round(performance.now() - startTime);
-            
+
             // Update modal display
             document.getElementById('cameraTotal').textContent = results.total;
             document.getElementById('cameraRBC').textContent = results.rbc;
             document.getElementById('cameraWBC').textContent = results.wbc;
-            
+
             // Update main dashboard
             document.getElementById('liveTotal').textContent = results.total;
             document.getElementById('liveRBC').textContent = results.rbc;
             document.getElementById('liveWBC').textContent = results.wbc;
             document.getElementById('aiTotal').textContent = results.total;
             document.getElementById('aiSpeed').textContent = `${processingTime}ms`;
-            
+
             // Save reading if auto-save enabled
             if (settings.autoSave && results.total > 0) {
                 saveReading(results, 'live');
@@ -1660,13 +1834,13 @@
                 showNotification('Camera not active', 'warning');
                 return;
             }
-            
+
             const canvas = document.getElementById('canvas');
             const link = document.createElement('a');
-            link.download = `blood-cell-analysis-${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.png`;
+            link.download = `blood-cell-analysis-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-            
+
             showNotification('Snapshot captured and saved', 'success');
         }
 
@@ -1676,24 +1850,24 @@
         function handleImageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            
+
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const img = new Image();
-                img.onload = function() {
+                img.onload = function () {
                     currentImage = img;
-                    
+
                     // Display preview
                     const preview = document.getElementById('imagePreview');
                     preview.src = e.target.result;
                     preview.style.display = 'block';
-                    
+
                     // Hide placeholder
                     document.getElementById('galleryPlaceholder').classList.add('hidden');
-                    
+
                     // Update image info
                     document.getElementById('imageSize').textContent = `${img.width}x${img.height}`;
-                    
+
                     // Auto-analyze
                     setTimeout(analyzeImage, 500);
                 };
@@ -1709,38 +1883,38 @@
             }
 
             showNotification('Analyzing image with OpenCV...', 'info');
-            
+
             const startTime = performance.now();
-            
+
             try {
                 const canvas = document.getElementById('imageCanvas');
                 const ctx = canvas.getContext('2d');
                 canvas.width = currentImage.width;
                 canvas.height = currentImage.height;
                 ctx.drawImage(currentImage, 0, 0);
-                
+
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                
+
                 // Detect cells using OpenCV
                 const detectionResults = await detectCellsWithOpenCV(imageData);
                 const processingTime = Math.round(performance.now() - startTime);
-                
+
                 // Draw markers on image
                 drawImageMarkers(detectionResults, canvas);
-                
+
                 // Update display
                 document.getElementById('imageCells').textContent = detectionResults.total;
                 document.getElementById('imageTime').textContent = `${processingTime}ms`;
                 document.getElementById('imageConfidence').textContent = '92%';
-                
+
                 // Save reading
                 saveReading(detectionResults, 'image');
-                
+
                 // Update dashboard
                 updateDashboardStats(detectionResults, processingTime);
-                
+
                 showNotification(`Analysis complete: ${detectionResults.total} cells detected`, 'success');
-                
+
             } catch (error) {
                 console.error('Image analysis error:', error);
                 showNotification('Analysis failed. Please try again.', 'error');
@@ -1749,11 +1923,11 @@
 
         function drawImageMarkers(results, canvas) {
             const ctx = canvas.getContext('2d');
-            
+
             // Clear canvas and draw original image
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(currentImage, 0, 0);
-            
+
             // Draw cell markers
             results.cells.forEach(cell => {
                 ctx.beginPath();
@@ -1761,13 +1935,13 @@
                 ctx.strokeStyle = cell.type === 'rbc' ? '#4CAF50' : '#2196F3';
                 ctx.lineWidth = 2;
                 ctx.stroke();
-                
+
                 // Center dot
                 ctx.beginPath();
                 ctx.arc(cell.x, cell.y, 2, 0, Math.PI * 2);
                 ctx.fillStyle = '#ffffff';
                 ctx.fill();
-                
+
                 // Confidence text
                 ctx.fillStyle = cell.type === 'rbc' ? '#4CAF50' : '#2196F3';
                 ctx.font = '10px Arial';
@@ -1793,26 +1967,26 @@
         function handleFilterUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            
+
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const img = new Image();
-                img.onload = function() {
+                img.onload = function () {
                     filterImage = img;
-                    
+
                     // Display preview
                     const preview = document.getElementById('filterPreview');
                     preview.src = e.target.result;
                     preview.style.display = 'block';
                     preview.style.width = '100%';
                     preview.style.height = 'auto';
-                    
+
                     // Hide placeholder
                     document.getElementById('filterPlaceholder').classList.add('hidden');
-                    
+
                     // Apply default filter preview
                     applyFilterToPreview();
-                    
+
                     showNotification('Image loaded for filter preview', 'info');
                 };
                 img.src = e.target.result;
@@ -1830,34 +2004,34 @@
             const ctx = canvas.getContext('2d');
             canvas.width = filterImage.width;
             canvas.height = filterImage.height;
-            
+
             try {
                 // Draw original image
                 ctx.drawImage(filterImage, 0, 0);
-                
+
                 if (currentFilter === 'none') {
                     // Show original
                     document.getElementById('filterPreview').style.display = 'block';
                     canvas.style.display = 'none';
                     return;
                 }
-                
+
                 // Get image data
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                
+
                 // Apply filter using OpenCV
                 const filtered = await applyOpenCVFilter(imageData, currentFilter);
-                
+
                 // Display filtered result
                 cv.imshow(canvas, filtered);
                 canvas.style.display = 'block';
                 document.getElementById('filterPreview').style.display = 'none';
-                
+
                 // Clean up
                 filtered.delete();
-                
+
                 showNotification(`${currentFilter} filter applied`, 'success');
-                
+
             } catch (error) {
                 console.error('Filter application error:', error);
                 showNotification('Failed to apply filter', 'error');
@@ -1866,21 +2040,21 @@
 
         async function applyOpenCVFilter(imageData, filterType) {
             if (!isOpenCvReady) return null;
-            
+
             const src = cv.matFromImageData(imageData);
             const result = new cv.Mat();
-            
+
             try {
-                switch(filterType) {
+                switch (filterType) {
                     case 'gaussian':
                         cv.GaussianBlur(
-                            src, 
-                            result, 
+                            src,
+                            result,
                             new cv.Size(filterParams.kernelSize * 2 + 1, filterParams.kernelSize * 2 + 1),
                             filterParams.sigma
                         );
                         break;
-                        
+
                     case 'median':
                         cv.medianBlur(
                             src,
@@ -1888,7 +2062,7 @@
                             filterParams.kernelSize * 2 + 1
                         );
                         break;
-                        
+
                     case 'bilateral':
                         cv.cvtColor(src, result, cv.COLOR_RGBA2RGB);
                         cv.bilateralFilter(
@@ -1900,11 +2074,11 @@
                         );
                         cv.cvtColor(result, result, cv.COLOR_RGB2RGBA);
                         break;
-                        
+
                     case 'contrast':
                         cv.convertScaleAbs(src, result, 1.5, 0);
                         break;
-                        
+
                     case 'edge':
                         const gray = new cv.Mat();
                         cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
@@ -1912,7 +2086,7 @@
                         cv.cvtColor(result, result, cv.COLOR_GRAY2RGBA);
                         gray.delete();
                         break;
-                        
+
                     case 'sharpen':
                         const kernel = cv.matFromArray(3, 3, cv.CV_32F, [
                             0, -1, 0,
@@ -1922,13 +2096,13 @@
                         cv.filter2D(src, result, -1, kernel);
                         kernel.delete();
                         break;
-                        
+
                     case 'threshold':
                         cv.cvtColor(src, result, cv.COLOR_RGBA2GRAY);
                         cv.threshold(result, result, 127, 255, cv.THRESH_BINARY);
                         cv.cvtColor(result, result, cv.COLOR_GRAY2RGBA);
                         break;
-                        
+
                     case 'adaptive':
                         cv.cvtColor(src, result, cv.COLOR_RGBA2GRAY);
                         cv.adaptiveThreshold(
@@ -1942,14 +2116,14 @@
                         );
                         cv.cvtColor(result, result, cv.COLOR_GRAY2RGBA);
                         break;
-                        
+
                     default:
                         src.copyTo(result);
                 }
-                
+
                 src.delete();
                 return result;
-                
+
             } catch (error) {
                 src.delete();
                 result.delete();
@@ -1970,21 +2144,21 @@
                 filter: currentFilter,
                 processingTime: results.processingTime || 0
             };
-            
+
             analysisHistory.push(reading);
-            
+
             // Keep only last 100 readings
             if (analysisHistory.length > 100) {
                 analysisHistory = analysisHistory.slice(-100);
             }
-            
+
             // Save to localStorage
             saveData();
         }
 
         function updateAnalysisDisplay() {
             const readings = analysisHistory;
-            
+
             if (readings.length === 0) {
                 document.getElementById('totalReadings').textContent = '0';
                 document.getElementById('avgRBC').textContent = '0';
@@ -1993,20 +2167,20 @@
                 updateHistoryList();
                 return;
             }
-            
+
             // Calculate statistics for last 5 readings
             const lastFive = readings.slice(-5);
             const totalReadings = readings.length;
             const avgRBC = Math.round(lastFive.reduce((sum, r) => sum + r.rbcCount, 0) / lastFive.length);
             const avgWBC = Math.round(lastFive.reduce((sum, r) => sum + r.wbcCount, 0) / lastFive.length);
             const successRate = Math.round((lastFive.filter(r => r.totalCells > 0).length / lastFive.length) * 100);
-            
+
             // Update display
             document.getElementById('totalReadings').textContent = totalReadings;
             document.getElementById('avgRBC').textContent = avgRBC;
             document.getElementById('avgWBC').textContent = avgWBC;
             document.getElementById('successRate').textContent = successRate + '%';
-            
+
             // Update history list
             updateHistoryList();
         }
@@ -2014,16 +2188,16 @@
         function updateHistoryList() {
             const container = document.getElementById('historyList');
             container.innerHTML = '';
-            
+
             const lastFive = analysisHistory.slice(-5).reverse();
-            
+
             if (lastFive.length === 0) {
                 container.innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">No analysis history yet</div>';
                 return;
             }
-            
+
             lastFive.forEach((reading, index) => {
-                const time = new Date(reading.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const time = new Date(reading.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const item = document.createElement('div');
                 item.className = 'history-item';
                 item.innerHTML = `
@@ -2048,21 +2222,21 @@
                 showNotification('No data to export', 'warning');
                 return;
             }
-            
+
             let csv = 'Timestamp,Total Cells,RBC Count,WBC Count,Source,Filter,Processing Time(ms)\n';
             analysisHistory.forEach(r => {
                 csv += `${r.timestamp},${r.totalCells},${r.rbcCount},${r.wbcCount},${r.source},${r.filter},${r.processingTime}\n`;
             });
-            
+
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `blood-analysis-${new Date().toISOString().slice(0,10)}.csv`;
+            a.download = `blood-analysis-${new Date().toISOString().slice(0, 10)}.csv`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            
+
             document.getElementById('exportStatus').textContent = 'CSV exported successfully';
             showNotification('Data exported as CSV', 'success');
         }
@@ -2072,7 +2246,7 @@
                 showNotification('No data to export', 'warning');
                 return;
             }
-            
+
             const data = {
                 metadata: {
                     app: "HemaScan Pro",
@@ -2082,17 +2256,17 @@
                 readings: analysisHistory,
                 settings: settings
             };
-            
+
             const jsonStr = JSON.stringify(data, null, 2);
             const blob = new Blob([jsonStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `blood-analysis-${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `blood-analysis-${new Date().toISOString().slice(0, 10)}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            
+
             document.getElementById('exportStatus').textContent = 'JSON exported successfully';
             showNotification('Data exported as JSON', 'success');
         }
@@ -2107,21 +2281,21 @@
                 showNotification('No image available for export', 'warning');
                 return;
             }
-            
+
             const link = document.createElement('a');
-            link.download = `blood-cell-analysis-${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.png`;
+            link.download = `blood-cell-analysis-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.png`;
             link.href = canvas.toDataURL('image/png');
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
+
             document.getElementById('exportStatus').textContent = 'Image exported successfully';
             showNotification('Image exported with markers', 'success');
         }
 
         function exportPDF() {
             document.getElementById('exportStatus').textContent = 'Generating PDF report...';
-            
+
             setTimeout(() => {
                 document.getElementById('exportStatus').textContent = 'PDF report saved to device';
                 showNotification('PDF report generated and saved', 'success');
@@ -2145,7 +2319,7 @@
             settings.analysisInterval = parseInt(document.getElementById('intervalSlider').value);
             settings.showMarkers = document.getElementById('showMarkers').checked;
             settings.autoSave = document.getElementById('autoSave').checked;
-            
+
             saveData();
             showNotification('Settings saved successfully', 'success');
             closeSettingsModal();
@@ -2171,17 +2345,17 @@
             clinicalMode = !clinicalMode;
             const body = document.body;
             const btn = document.querySelector('.icon-box:last-child');
-            
+
             if (clinicalMode) {
                 body.classList.add('clinical-mode');
-                btn.innerHTML = '<span style="font-size: 24px;">🧿</span><div class="icon-label">Dark</div>';
+                btn.innerHTML = '<span style="font-size: 24px;">🌑</span><div class="icon-label">Dark</div>';
                 showNotification('Dark mode enabled', 'success');
             } else {
                 body.classList.remove('clinical-mode');
                 btn.innerHTML = '<span style="font-size: 24px;">☀️</span><div class="icon-label">Light</div>';
                 showNotification('Light mode enabled', 'info');
             }
-            
+
             saveData();
         }
 
@@ -2192,11 +2366,11 @@
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.classList.remove('active');
             });
-            
+
             if (isLiveDetection) {
                 stopLiveDetection();
             }
-            
+
             showNotification('Returned to home screen', 'info');
         }
 
@@ -2226,11 +2400,11 @@
                 if (videoStream) {
                     videoStream.getTracks().forEach(track => track.stop());
                 }
-                
+
                 saveData();
-                
+
                 showNotification('App closed successfully', 'success');
-                
+
                 setTimeout(() => {
                     document.body.innerHTML = `
                         <div style="text-align: center; color: white; padding: 40px;">
@@ -2249,7 +2423,7 @@
         function showNotification(message, type = 'info') {
             const existing = document.querySelectorAll('.notification');
             existing.forEach(n => n.remove());
-            
+
             const notification = document.createElement('div');
             notification.className = 'notification';
             notification.style.cssText = `
@@ -2257,9 +2431,9 @@
                 top: 20px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: ${type === 'success' ? '#4CAF50' : 
-                           type === 'error' ? '#f44336' : 
-                           type === 'warning' ? '#FF9800' : '#2196F3'};
+                background: ${type === 'success' ? '#4CAF50' :
+                    type === 'error' ? '#f44336' :
+                        type === 'warning' ? '#FF9800' : '#2196F3'};
                 color: white;
                 padding: 12px 24px;
                 border-radius: 8px;
@@ -2270,9 +2444,9 @@
                 animation: slideDown 0.3s ease-out;
             `;
             notification.textContent = message;
-            
+
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.style.animation = 'slideUp 0.3s ease-in';
                 setTimeout(() => {
@@ -2321,7 +2495,7 @@
                     settings = data.settings || settings;
                     analysisHistory = data.analysisHistory || [];
                     clinicalMode = data.clinicalMode || false;
-                    
+
                     if (clinicalMode) {
                         document.body.classList.add('clinical-mode');
                     }
@@ -2336,7 +2510,7 @@
                 showNotification('No history to clear', 'warning');
                 return;
             }
-            
+
             if (confirm('Clear all analysis history? This cannot be undone.')) {
                 analysisHistory = [];
                 saveData();
@@ -2354,4 +2528,5 @@
         // All initialization happens in DOMContentLoaded event
     </script>
 </body>
+
 </html>
